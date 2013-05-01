@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: MainMat
-  m_Shader: {fileID: 7, guid: 0000000000000000e000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: b652dab72d918bb46a4bf53592b58f58, type: 3}
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
@@ -18,7 +18,25 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-    m_Floats: {}
+      data:
+        first:
+          name: _Wall
+        second:
+          m_Texture: {fileID: 2800000, guid: be8ba36906c193046ad1bd6a3a00b1ad, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Floor
+        second:
+          m_Texture: {fileID: 2800000, guid: 41a8eebfff5368c4e95f31f3d0fe4e61, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Frequency
+        second: .300000012
     m_Colors:
       data:
         first:
