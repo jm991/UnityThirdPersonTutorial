@@ -1,13 +1,17 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ThirdPersonCamera.cs">
+    <Files>
+      <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="166" Column="1" />
+      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="62" Column="34" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
             <Node name="Assets" expanded="True">
-              <Node name="Effects" expanded="True">
-                <Node name="BarsEffect.cs" selected="True" />
+              <Node name="Scripts" expanded="True">
+                <Node name="ThirdPersonCamera.cs" selected="True" />
               </Node>
             </Node>
           </Node>
