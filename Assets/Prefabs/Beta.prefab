@@ -1064,9 +1064,11 @@ GameObject:
   - 95: {fileID: 9500000}
   - 54: {fileID: 5400000}
   - 136: {fileID: 13600000}
+  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Beta
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1934,8 +1936,8 @@ Rigidbody:
   m_AngularDrag: .0500000007
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
+  m_Interpolate: 1
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!95 &9500000
 Animator:
@@ -1949,6 +1951,47 @@ Animator:
   m_CullingMode: 1
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e189725cd50d5e4d9685014e9943197, type: 3}
+  m_Name: 
+  on: 0
+  onlyInPlayMode: 1
+  sceneViewFollowers:
+  - enable: 1
+    positionOffset: {x: 0, y: 1.5, z: 0}
+    enableFixedRotation: 1
+    fixedRotation: {x: 90, y: 0, z: 0}
+    targetTransform: {fileID: 400140}
+    size: 5
+    orthographic: 1
+    sceneViewIndex: 0
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b216def2ca252840817bbbae8b9f6bf, type: 3}
+  m_Name: 
+  animator: {fileID: 9500000}
+  gamecam: {fileID: 0}
+  rotationDegreePerSecond: 120
+  directionSpeed: 1.5
+  directionDampTime: .25
+  speedDampTime: .0500000007
+  fovDampTime: 3
+  jumpMultiplier: .200000003
+  capCollider: {fileID: 0}
+  jumpDist: 3
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1
