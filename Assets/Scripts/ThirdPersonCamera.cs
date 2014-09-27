@@ -25,6 +25,9 @@ using System.Collections;
 /// <summary>
 /// Struct to hold data for aligning camera
 /// </summary>
+using UnityEditor;
+
+
 struct CameraPosition 
 {
 	// Position to align camera to, probably somewhere behind the character
@@ -92,6 +95,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private const float freeRotationDegreePerSecond = -5f;
 	[SerializeField]
 	private float mouseWheelSensitivity = 3.0f;
+	[SerializeField]
+	private float compensationOffset = 0.2f;
 	
 	
 	// Smoothing and damping
@@ -117,6 +122,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float distanceUpFree;	
 	private Vector2 rightStickPrevFrame = Vector2.zero;
 	private float lastStickMin = float.PositiveInfinity;	// Used to prevent from zooming in when holding back on the right stick/scrollwheel
+	private Vector3 nearClipDimensions = Vector3.zero; // width, height, radius
+	private Vector3[] viewFrustum;
 	
 	#endregion
 	
@@ -207,11 +214,16 @@ public class ThirdPersonCamera : MonoBehaviour
 	/// </summary>
 	void OnDrawGizmos ()
 	{	
-	
+		if (EditorApplication.isPlaying && !EditorApplication.isPaused)
+		{			
+			DebugDraw.DrawDebugFrustum(viewFrustum);
+		}
 	}
 	
 	void LateUpdate()
 	{		
+		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+
 		// Pull values from controller/keyboard
 		float rightX = Input.GetAxis("RightStickX");
 		float rightY = Input.GetAxis("RightStickY");
@@ -437,14 +449,59 @@ public class ThirdPersonCamera : MonoBehaviour
 
 	private void CompensateForWalls(Vector3 fromObject, ref Vector3 toTarget)
 	{
-		Debug.DrawLine(fromObject, toTarget, Color.cyan);
 		// Compensate for walls between camera
 		RaycastHit wallHit = new RaycastHit();		
 		if (Physics.Linecast(fromObject, toTarget, out wallHit)) 
 		{
 			Debug.DrawRay(wallHit.point, wallHit.normal, Color.red);
-			toTarget = new Vector3(wallHit.point.x, toTarget.y, wallHit.point.z);
+			toTarget = wallHit.point;
+		}		
+		
+		// Compensate for geometry intersecting with near clip plane
+		Vector3 camPosCache = camera.transform.position;
+		camera.transform.position = toTarget;
+		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+		
+		for (int i = 0; i < (viewFrustum.Length / 2); i++)
+		{
+			RaycastHit cWHit = new RaycastHit();
+			RaycastHit cCWHit = new RaycastHit();
+			
+			// Cast lines in both directions around near clipping plane bounds
+			while (Physics.Linecast(viewFrustum[i], viewFrustum[(i + 1) % (viewFrustum.Length / 2)], out cWHit) ||
+			       Physics.Linecast(viewFrustum[(i + 1) % (viewFrustum.Length / 2)], viewFrustum[i], out cCWHit))
+			{
+				Vector3 normal = wallHit.normal;
+				if (wallHit.normal == Vector3.zero)
+				{
+					// If there's no available wallHit, use normal of geometry intersected by LineCasts instead
+					if (cWHit.normal == Vector3.zero)
+					{
+						if (cCWHit.normal == Vector3.zero)
+						{
+							Debug.LogError("No available geometry normal from near clip plane LineCasts. Something must be amuck.", this);
+						}
+						else
+						{
+							normal = cCWHit.normal;
+						}
+					}	
+					else
+					{
+						normal = cWHit.normal;
+					}
+				}
+				
+				toTarget += (compensationOffset * normal);
+				camera.transform.position += toTarget;
+				
+				// Recalculate positions of near clip plane
+				viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+			}
 		}
+		
+		camera.transform.position = camPosCache;
+		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
 	}
 	
 	/// <summary>

@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ThirdPersonCamera.cs">
     <Files>
-      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="212" Column="32" />
+      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="451" Column="24" />
       <File FileName="Assets\Scripts\ThirdPersonCameraEditor.cs" Line="13" Column="53" />
     </Files>
     <Pads>
@@ -14,6 +14,9 @@
             </Node>
           </Node>
         </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
