@@ -90,6 +90,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float rightStickThreshold = 0.1f;
 	[SerializeField]
 	private const float freeRotationDegreePerSecond = -5f;
+	[SerializeField]
+	private float mouseWheelSensitivity = 3.0f;
 	
 	
 	// Smoothing and damping
@@ -114,6 +116,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float distanceAwayFree;
 	private float distanceUpFree;	
 	private Vector2 rightStickPrevFrame = Vector2.zero;
+	private float lastStickMin = float.PositiveInfinity;	// Used to prevent from zooming in when holding back on the right stick/scrollwheel
 	
 	#endregion
 	
@@ -146,10 +149,10 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	public enum CamStates
 	{
-		Behind,
-		FirstPerson,
-		Target,
-		Free
+		Behind,			// Single analog stick, Japanese-style; character orbits around camera; default for games like Mario64 and 3D Zelda series
+		FirstPerson,	// Traditional 1st person look around
+		Target,			// L-targeting variation on "Behind" mode
+		Free			// High angle; character moves relative to camera facing direction
 	}
 	
 	#endregion
@@ -213,7 +216,33 @@ public class ThirdPersonCamera : MonoBehaviour
 		float rightX = Input.GetAxis("RightStickX");
 		float rightY = Input.GetAxis("RightStickY");
 		float leftX = Input.GetAxis("Horizontal");
-		float leftY = Input.GetAxis("Vertical");	
+		float leftY = Input.GetAxis("Vertical");
+		float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
+		float mouseWheelScaled = mouseWheel * mouseWheelSensitivity;
+		float leftTrigger = Input.GetAxis("Target");
+		bool bButtonPressed = Input.GetButton("ExitFPV");
+		bool qKeyDown = Input.GetKey(KeyCode.Q);
+		bool eKeyDown = Input.GetKey(KeyCode.E);
+		bool lShiftKeyDown = Input.GetKey(KeyCode.LeftShift);
+
+		// Abstraction to set right Y when using mouse
+		if (mouseWheel != 0)
+		{
+			rightY = mouseWheelScaled;
+			Debug.Log(mouseWheelScaled);
+		}
+		if (qKeyDown)
+		{
+			rightX = 1;
+		}
+		if (eKeyDown)
+		{
+			rightX = -1;
+		}
+		if (lShiftKeyDown)
+		{
+			leftTrigger = 1;
+		}
 		
 		Vector3 characterOffset = followXform.position + new Vector3(0f, distanceUp, 0f);
 		Vector3 lookAt = characterOffset;
@@ -221,7 +250,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		
 		// Determine camera state
 		// * Targeting *
-		if (Input.GetAxis("Target") > TARGETING_THRESHOLD)
+		if (leftTrigger > TARGETING_THRESHOLD)
 		{
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, widescreen, targetingTime);
 			
@@ -232,23 +261,30 @@ public class ThirdPersonCamera : MonoBehaviour
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
 			
 			// * First Person *
-			if (rightY > firstPersonThreshold && camState != CamStates.Free && camState != CamStates.Free && !follow.IsInLocomotion())
+			if (rightY > firstPersonThreshold && camState != CamStates.Free && !follow.IsInLocomotion())
 			{
 				// Reset look before entering the first person mode
 				xAxisRot = 0;
 				lookWeight = 0f;
 				camState = CamStates.FirstPerson;
 			}
-			
-			if (rightY < freeThreshold && System.Math.Round(follow.Speed, 2) == 0)
+
+			// * Free *
+			if ((rightY < freeThreshold || mouseWheel < 0f) && System.Math.Round(follow.Speed, 2) == 0)
 			{
 				camState = CamStates.Free;
 				savedRigToGoal = Vector3.zero;
+				if (camState != CamStates.Free)
+				{
+					// Intialize values to avoid having 0s
+					distanceUpFree = distanceUp;
+					distanceAwayFree = distanceAway;//rigToGoal.magnitude;
+				}
 			}
-			
+
 			// * Behind the back *
-			if ((camState == CamStates.FirstPerson && Input.GetButton("ExitFPV")) || 
-				(camState == CamStates.Target && (Input.GetAxis("Target") <= TARGETING_THRESHOLD)))
+			if ((camState == CamStates.FirstPerson && bButtonPressed) || 
+				(camState == CamStates.Target && leftTrigger <= TARGETING_THRESHOLD))
 			{
 				camState = CamStates.Behind;	
 			}
@@ -333,28 +369,33 @@ public class ThirdPersonCamera : MonoBehaviour
 				rigToGoalDirection.y = 0f;
 				
 				Vector3 rigToGoal = characterOffset - parentRig.position;
-				rigToGoal.y = 0;
+				rigToGoal.y = 0f;
 				Debug.DrawRay(parentRig.transform.position, rigToGoal, Color.red);
 				
 				// Panning in and out
 				// If statement works for positive values; don't tween if stick not increasing in either direction; also don't tween if user is rotating
 				// Checked against rightStickThreshold because very small values for rightY mess up the Lerp function
-				if (rightY < -1f * rightStickThreshold && rightY <= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
+				if (rightY < lastStickMin && rightY < -1f * rightStickThreshold && rightY <= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
 				{
+//					Debug.Log("Zooming out");
+					// Zooming out
 					distanceUpFree = Mathf.Lerp(distanceUp, distanceUp * distanceUpMultiplier, Mathf.Abs(rightY));
 					distanceAwayFree = Mathf.Lerp(distanceAway, distanceAway * distanceAwayMultipler, Mathf.Abs(rightY));
 					targetPosition = characterOffset + followXform.up * distanceUpFree - rigToGoalDirection * distanceAwayFree;
-				}
+					lastStickMin = rightY;
+                }
 				else if (rightY > rightStickThreshold && rightY >= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
 				{
-					// Subtract height of camera from height of player to find Y distance
+//					Debug.LogError("Zooming in");
+                	// Zooming in
+                	// Subtract height of camera from height of player to find Y distance
 					distanceUpFree = Mathf.Lerp(Mathf.Abs(transform.position.y - characterOffset.y), camMinDistFromChar.y, rightY);
 					// Use magnitude function to find X distance	
-					distanceAwayFree = Mathf.Lerp(rigToGoal.magnitude, camMinDistFromChar.x, rightY);
-					
-					targetPosition = characterOffset + followXform.up * distanceUpFree - rigToGoalDirection * distanceAwayFree;
-				}
-				
+					distanceAwayFree = Mathf.Lerp(rigToGoal.magnitude, camMinDistFromChar.x, rightY);		
+					targetPosition = characterOffset + followXform.up * distanceUpFree - rigToGoalDirection * distanceAwayFree;		
+					lastStickMin = float.PositiveInfinity;
+				}				
+                                
 				// Store direction only if right stick inactive
 				if (rightX != 0 || rightY != 0)
 				{
@@ -370,23 +411,17 @@ public class ThirdPersonCamera : MonoBehaviour
 				{
 					targetPosition = characterOffset + followXform.up * distanceUpFree - savedRigToGoal * distanceAwayFree;
 				}
-			
-//				SmoothPosition(transform.position, targetPosition);
-//				transform.LookAt(lookAt);	
+
 				break;
 		}
 		
-		
-//		if (camState != CamStates.Free)
-//		{
-			CompensateForWalls(characterOffset, ref targetPosition);
-			
-			SmoothPosition(parentRig.position, targetPosition);
-		
-			transform.LookAt(lookAt);	
-//		}
-		
-		rightStickPrevFrame = new Vector2(rightX, rightY);
+
+		CompensateForWalls(characterOffset, ref targetPosition);		
+		SmoothPosition(parentRig.position, targetPosition);	
+		transform.LookAt(lookAt);	
+
+		// Make sure to cache the unscaled mouse wheel value if using mouse/keyboard instead of controller
+		rightStickPrevFrame = new Vector2(rightX, rightY);//mouseWheel != 0 ? mouseWheelScaled : rightY);
 	}
 	
 	#endregion

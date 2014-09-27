@@ -51,6 +51,7 @@ Transform:
   m_Children:
   - {fileID: 400002}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -62,6 +63,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!20 &2000000
 Camera:
   m_ObjectHideFlags: 1
@@ -89,7 +91,11 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: 2
   m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
   m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!81 &8100000
 AudioListener:
   m_ObjectHideFlags: 1
@@ -110,10 +116,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0923359e9e352a4b9b11c7b7161ad67, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   m_Radius: .400000006
   m_SampleCount: 1
   m_OcclusionIntensity: 1.5
@@ -129,10 +136,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a773099f140e846f7835d27351846623, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   tweakMode: 0
   screenBlendMode: 1
   hdr: 0
@@ -167,10 +175,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8891d133b6d44045a6e76cf5894e931, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   shader: {fileID: 4800000, guid: d843cea39eb53424b9eb9981ace48fe7, type: 3}
   coverage: 0
   barTexture: {fileID: 2800000, guid: 12a43dc41561f6a44bed4047aedd1e9f, type: 3}
@@ -184,11 +193,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b59969cb0b132da4683696fcedac6864, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   parentRig: {fileID: 0}
   distanceAway: 3.5
-  distanceAwayMultipler: 2
+  distanceAwayMultipler: 3
   distanceUp: 1.14999998
-  distanceUpMultiplier: 2.5
+  distanceUpMultiplier: 4
   follow: {fileID: 0}
   followXform: {fileID: 0}
   widescreen: .200000003
@@ -200,6 +210,7 @@ MonoBehaviour:
   freeThreshold: -.100000001
   camMinDistFromChar: {x: 1, y: -.5}
   rightStickThreshold: .300000012
+  mouseWheelSensitivity: 3
   camSmoothDampTime: .100000001
   lookDirDampTime: .100000001
 --- !u!114 &11400008
@@ -208,10 +219,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9aaa3f5f2d574f228e4a21aa38b61e4, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   mode: 1
   showGeneratedNormals: 0
   offsetScale: .200000003
