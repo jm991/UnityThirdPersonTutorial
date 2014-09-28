@@ -21,13 +21,12 @@
 /// </summary>
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
+
 
 /// <summary>
 /// Struct to hold data for aligning camera
 /// </summary>
-using UnityEditor;
-
-
 struct CameraPosition 
 {
 	// Position to align camera to, probably somewhere behind the character
@@ -60,7 +59,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	// Inspector serialized	
 	[SerializeField]
-	private Transform parentRig;
+	private Transform cameraXform;
 	[SerializeField]
 	private float distanceAway;
 	[SerializeField]
@@ -97,6 +96,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float mouseWheelSensitivity = 3.0f;
 	[SerializeField]
 	private float compensationOffset = 0.2f;
+	[SerializeField]
+	private CamStates startingState = CamStates.Free;
 	
 	
 	// Smoothing and damping
@@ -124,17 +125,19 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float lastStickMin = float.PositiveInfinity;	// Used to prevent from zooming in when holding back on the right stick/scrollwheel
 	private Vector3 nearClipDimensions = Vector3.zero; // width, height, radius
 	private Vector3[] viewFrustum;
+	private Vector3 characterOffset;
+	private Vector3 targetPosition;	
 	
 	#endregion
 	
 	
 	#region Properties (public)	
 
-	public Transform ParentRig
+	public Transform CameraXform
 	{
 		get
 		{
-			return this.parentRig;
+			return this.cameraXform;
 		}
 	}
 
@@ -161,6 +164,19 @@ public class ThirdPersonCamera : MonoBehaviour
 		Target,			// L-targeting variation on "Behind" mode
 		Free			// High angle; character moves relative to camera facing direction
 	}
+
+	public Vector3 RigToGoalDirection
+	{
+		get
+		{
+			// Move height and distance from character in separate parentRig transform since RotateAround has control of both position and rotation
+			Vector3 rigToGoalDirection = Vector3.Normalize(characterOffset - this.transform.position);
+			// Can't calculate distanceAway from a vector with Y axis rotation in it; zero it out
+			rigToGoalDirection.y = 0f;
+
+			return rigToGoalDirection;
+		}
+	}
 	
 	#endregion
 	
@@ -172,8 +188,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	/// </summary>
 	void Start ()
 	{
-		parentRig = this.transform.parent;
-		if (parentRig == null)
+		cameraXform = this.transform;//.parent;
+		if (cameraXform == null)
 		{
 			Debug.LogError("Parent camera to empty GameObject.", this);
 		}
@@ -199,6 +215,14 @@ public class ThirdPersonCamera : MonoBehaviour
 				new GameObject().transform,
 				follow.transform
 			);	
+
+		camState = startingState;
+
+		// Intialize values to avoid having 0s
+		characterOffset = followXform.position + new Vector3(0f, distanceUp, 0f);
+		distanceUpFree = distanceUp;
+		distanceAwayFree = distanceAway;
+		savedRigToGoal = RigToGoalDirection;
 	}
 	
 	/// <summary>
@@ -241,7 +265,6 @@ public class ThirdPersonCamera : MonoBehaviour
 		if (mouseWheel != 0)
 		{
 			rightY = mouseWheelScaled;
-			Debug.Log(mouseWheelScaled);
 		}
 		if (qKeyDown)
 		{
@@ -256,9 +279,9 @@ public class ThirdPersonCamera : MonoBehaviour
 			leftTrigger = 1;
 		}
 		
-		Vector3 characterOffset = followXform.position + new Vector3(0f, distanceUp, 0f);
+		characterOffset = followXform.position + (distanceUp * followXform.up);
 		Vector3 lookAt = characterOffset;
-		Vector3 targetPosition = Vector3.zero;
+		targetPosition = Vector3.zero;
 		
 		// Determine camera state
 		// * Targeting *
@@ -286,12 +309,6 @@ public class ThirdPersonCamera : MonoBehaviour
 			{
 				camState = CamStates.Free;
 				savedRigToGoal = Vector3.zero;
-				if (camState != CamStates.Free)
-				{
-					// Intialize values to avoid having 0s
-					distanceUpFree = distanceUp;
-					distanceAwayFree = distanceAway;//rigToGoal.magnitude;
-				}
 			}
 
 			// * Behind the back *
@@ -374,49 +391,42 @@ public class ThirdPersonCamera : MonoBehaviour
 				break;
 			case CamStates.Free:
 				lookWeight = Mathf.Lerp(lookWeight, 0.0f, Time.deltaTime * firstPersonLookSpeed);
-				
-				// Move height and distance from character in separate parentRig transform since RotateAround has control of both position and rotation
-				Vector3 rigToGoalDirection = Vector3.Normalize(characterOffset - this.transform.position);
-				// Can't calculate distanceAway from a vector with Y axis rotation in it; zero it out
-				rigToGoalDirection.y = 0f;
-				
-				Vector3 rigToGoal = characterOffset - parentRig.position;
+
+				Vector3 rigToGoal = characterOffset - cameraXform.position;
 				rigToGoal.y = 0f;
-				Debug.DrawRay(parentRig.transform.position, rigToGoal, Color.red);
+				Debug.DrawRay(cameraXform.transform.position, rigToGoal, Color.red);
 				
 				// Panning in and out
 				// If statement works for positive values; don't tween if stick not increasing in either direction; also don't tween if user is rotating
 				// Checked against rightStickThreshold because very small values for rightY mess up the Lerp function
 				if (rightY < lastStickMin && rightY < -1f * rightStickThreshold && rightY <= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
 				{
-//					Debug.Log("Zooming out");
 					// Zooming out
 					distanceUpFree = Mathf.Lerp(distanceUp, distanceUp * distanceUpMultiplier, Mathf.Abs(rightY));
 					distanceAwayFree = Mathf.Lerp(distanceAway, distanceAway * distanceAwayMultipler, Mathf.Abs(rightY));
-					targetPosition = characterOffset + followXform.up * distanceUpFree - rigToGoalDirection * distanceAwayFree;
+					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;
 					lastStickMin = rightY;
                 }
 				else if (rightY > rightStickThreshold && rightY >= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
 				{
-//					Debug.LogError("Zooming in");
                 	// Zooming in
                 	// Subtract height of camera from height of player to find Y distance
 					distanceUpFree = Mathf.Lerp(Mathf.Abs(transform.position.y - characterOffset.y), camMinDistFromChar.y, rightY);
 					// Use magnitude function to find X distance	
 					distanceAwayFree = Mathf.Lerp(rigToGoal.magnitude, camMinDistFromChar.x, rightY);		
-					targetPosition = characterOffset + followXform.up * distanceUpFree - rigToGoalDirection * distanceAwayFree;		
+					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;		
 					lastStickMin = float.PositiveInfinity;
 				}				
                                 
 				// Store direction only if right stick inactive
 				if (rightX != 0 || rightY != 0)
 				{
-					savedRigToGoal = rigToGoalDirection;
+					savedRigToGoal = RigToGoalDirection;
 				}
 				
 			
 				// Rotating around character
-				parentRig.RotateAround(characterOffset, followXform.up, freeRotationDegreePerSecond * (Mathf.Abs(rightX) > rightStickThreshold ? rightX : 0f));
+				cameraXform.RotateAround(characterOffset, followXform.up, freeRotationDegreePerSecond * (Mathf.Abs(rightX) > rightStickThreshold ? rightX : 0f));
 								
 				// Still need to track camera behind player even if they aren't using the right stick; achieve this by saving distanceAwayFree every frame
 				if (targetPosition == Vector3.zero)
@@ -429,7 +439,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		
 
 		CompensateForWalls(characterOffset, ref targetPosition);		
-		SmoothPosition(parentRig.position, targetPosition);	
+		SmoothPosition(cameraXform.position, targetPosition);	
 		transform.LookAt(lookAt);	
 
 		// Make sure to cache the unscaled mouse wheel value if using mouse/keyboard instead of controller
@@ -444,7 +454,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private void SmoothPosition(Vector3 fromPos, Vector3 toPos)
 	{		
 		// Making a smooth transition between camera's current position and the position it wants to be in
-		parentRig.position = Vector3.SmoothDamp(fromPos, toPos, ref velocityCamSmooth, camSmoothDampTime);
+		cameraXform.position = Vector3.SmoothDamp(fromPos, toPos, ref velocityCamSmooth, camSmoothDampTime);
 	}
 
 	private void CompensateForWalls(Vector3 fromObject, ref Vector3 toTarget)
