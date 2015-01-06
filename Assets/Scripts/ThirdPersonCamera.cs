@@ -21,8 +21,10 @@
 /// </summary>
 using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Struct to hold data for aligning camera
@@ -233,6 +235,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		
 	}
 	
+    #if UNITY_EDITOR
 	/// <summary>
 	/// Debugging information should be put here.
 	/// </summary>
@@ -243,6 +246,7 @@ public class ThirdPersonCamera : MonoBehaviour
 			DebugDraw.DrawDebugFrustum(viewFrustum);
 		}
 	}
+    #endif
 	
 	void LateUpdate()
 	{		

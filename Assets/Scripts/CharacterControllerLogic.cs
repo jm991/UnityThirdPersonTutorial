@@ -209,7 +209,7 @@ public class CharacterControllerLogic : MonoBehaviour
 			capCollider.height = capsuleHeight + (animator.GetFloat("CapsuleCurve") * 0.5f);
 			if (gamecam.CamState != ThirdPersonCamera.CamStates.Free)
 			{
-				gamecam.ParentRig.Translate(Vector3.up * (transform.position.y - oldY));
+                gamecam.transform.Translate(Vector3.up * (transform.position.y - oldY));
 			}
 		}
 	}
