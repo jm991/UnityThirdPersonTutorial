@@ -1,0 +1,119 @@
+# 3ds Max Wavefront OBJ Exporter v0.94b - (c)2007 guruware
+# File Created: 18.11.2010 20:48:33
+
+newmtl m2
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS00.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS00.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS00.png"
+
+newmtl m3
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS01.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS01.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS01.png"
+
+newmtl m1
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+
+newmtl m4
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS02.png"
+
+newmtl m5
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS06.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS06.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS06.png"
+
+newmtl m6
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS07.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS07.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS07.png"
+
+newmtl m7
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS08.png"
+	map_Kd "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS08.png"
+	map_d "C:\Users\Lexou\Documents\3D stuff\Wind Waker Stages\Outset Island\Sea.SS08.png"
+
+newmtl m0
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
