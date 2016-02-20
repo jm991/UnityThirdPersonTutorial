@@ -159,12 +159,12 @@ public class CharacterControllerLogic : MonoBehaviour
 			if (Input.GetButton("Sprint"))
 			{
 				speed = Mathf.Lerp(speed, SPRINT_SPEED, Time.deltaTime);
-				gamecam.camera.fieldOfView = Mathf.Lerp(gamecam.camera.fieldOfView, SPRINT_FOV, fovDampTime * Time.deltaTime);
+				gamecam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(gamecam.GetComponent<Camera>().fieldOfView, SPRINT_FOV, fovDampTime * Time.deltaTime);
 			}
 			else
 			{
 				speed = charSpeed;
-				gamecam.camera.fieldOfView = Mathf.Lerp(gamecam.camera.fieldOfView, NORMAL_FOV, fovDampTime * Time.deltaTime);		
+				gamecam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(gamecam.GetComponent<Camera>().fieldOfView, NORMAL_FOV, fovDampTime * Time.deltaTime);		
 			}
 			
 			animator.SetFloat("Speed", speed, speedDampTime, Time.deltaTime);
@@ -209,7 +209,7 @@ public class CharacterControllerLogic : MonoBehaviour
 			capCollider.height = capsuleHeight + (animator.GetFloat("CapsuleCurve") * 0.5f);
 			if (gamecam.CamState != ThirdPersonCamera.CamStates.Free)
 			{
-				gamecam.ParentRig.Translate(Vector3.up * (transform.position.y - oldY));
+				gamecam.transform.Translate(Vector3.up * (transform.position.y - oldY));
 			}
 		}
 	}

@@ -246,7 +246,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	void LateUpdate()
 	{		
-		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+		viewFrustum = DebugDraw.CalculateViewFrustum(GetComponent<Camera>(), ref nearClipDimensions);
 
 		// Pull values from controller/keyboard
 		float rightX = Input.GetAxis("RightStickX");
@@ -468,9 +468,9 @@ public class ThirdPersonCamera : MonoBehaviour
 		}		
 		
 		// Compensate for geometry intersecting with near clip plane
-		Vector3 camPosCache = camera.transform.position;
-		camera.transform.position = toTarget;
-		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+		Vector3 camPosCache = GetComponent<Camera>().transform.position;
+		GetComponent<Camera>().transform.position = toTarget;
+		viewFrustum = DebugDraw.CalculateViewFrustum(GetComponent<Camera>(), ref nearClipDimensions);
 		
 		for (int i = 0; i < (viewFrustum.Length / 2); i++)
 		{
@@ -503,15 +503,15 @@ public class ThirdPersonCamera : MonoBehaviour
 				}
 				
 				toTarget += (compensationOffset * normal);
-				camera.transform.position += toTarget;
+				GetComponent<Camera>().transform.position += toTarget;
 				
 				// Recalculate positions of near clip plane
-				viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+				viewFrustum = DebugDraw.CalculateViewFrustum(GetComponent<Camera>(), ref nearClipDimensions);
 			}
 		}
 		
-		camera.transform.position = camPosCache;
-		viewFrustum = DebugDraw.CalculateViewFrustum(camera, ref nearClipDimensions);
+		GetComponent<Camera>().transform.position = camPosCache;
+		viewFrustum = DebugDraw.CalculateViewFrustum(GetComponent<Camera>(), ref nearClipDimensions);
 	}
 	
 	/// <summary>
