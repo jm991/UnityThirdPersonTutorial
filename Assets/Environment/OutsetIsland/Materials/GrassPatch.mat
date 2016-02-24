@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: GrassPatch
-  m_Shader: {fileID: 4800000, guid: 55e68a396cd3adb4ca450e6ed5f6a7d1, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9264dbbe5d7e4594289b579f2197836f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
@@ -127,6 +127,14 @@ Material:
         first:
           name: _Metallic
         second: 0
+      data:
+        first:
+          name: _Range1
+        second: 0.5
+      data:
+        first:
+          name: _Range2
+        second: 50
     m_Colors:
       data:
         first:
@@ -135,4 +143,12 @@ Material:
       data:
         first:
           name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTint
         second: {r: 1, g: 1, b: 1, a: 1}

@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Beta_Body_MAT
-  m_Shader: {fileID: 4800000, guid: 01db43bb96a48a14eaa139b327ef4238, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9264dbbe5d7e4594289b579f2197836f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
@@ -167,8 +167,16 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 0.9925373, g: 0.9978072, b: 1, a: 1}
+        second: {r: 0, g: 0, b: 0, a: 1}
       data:
         first:
           name: _Indicator
         second: {r: 0.09803922, g: 0.13725491, b: 0.23529412, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _ColorTint
+        second: {r: 1, g: 1, b: 1, a: 1}

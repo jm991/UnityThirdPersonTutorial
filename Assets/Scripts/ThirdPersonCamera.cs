@@ -165,6 +165,15 @@ public class ThirdPersonCamera : MonoBehaviour
 		Free			// High angle; character moves relative to camera facing direction
 	}
 
+	public enum AnimatorLayers
+	{
+		// There is no programatic way to access the names of the layers in the Mecanim Animator controller
+		// Therefore, try to keep this enum's names up to date with what's in the Animator tab
+		// Layers are 0-indexed (Default "Base Layer" is always 0)
+		BaseLayer = 0,
+		Targeting = 1
+	}
+
 	public Vector3 RigToGoalDirection
 	{
 		get
@@ -223,6 +232,10 @@ public class ThirdPersonCamera : MonoBehaviour
 		distanceUpFree = distanceUp;
 		distanceAwayFree = distanceAway;
 		savedRigToGoal = RigToGoalDirection;
+
+		// Initialize the Animator to the base layer 
+		// If you have more than one layer, you'll need to do this for each layer
+		follow.Animator.SetLayerWeight ((int) AnimatorLayers.Targeting, 0.0f);
 	}
 	
 	/// <summary>
@@ -282,18 +295,21 @@ public class ThirdPersonCamera : MonoBehaviour
 		characterOffset = followXform.position + (distanceUp * followXform.up);
 		Vector3 lookAt = characterOffset;
 		targetPosition = Vector3.zero;
-		
+
+
 		// Determine camera state
 		// * Targeting *
 		if (leftTrigger > TARGETING_THRESHOLD)
-		{
-			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, widescreen, targetingTime);
-			
+		{			
 			camState = CamStates.Target;
+
+			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, widescreen, targetingTime);
+			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 1.0f);
 		}
 		else
 		{			
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
+			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
 			
 			// * First Person *
 			if (rightY > firstPersonThreshold && camState != CamStates.Free && !follow.IsInLocomotion())
