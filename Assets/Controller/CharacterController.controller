@@ -648,7 +648,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Direction
+  m_BlendParameter: XStick
   m_BlendParameterY: Blend
   m_MinThreshold: -1
   m_MaxThreshold: 1
@@ -762,7 +762,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Direction
+  m_BlendParameter: XStick
   m_BlendParameterY: Blend
   m_MinThreshold: -0.6
   m_MaxThreshold: 0.6
@@ -832,7 +832,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Direction
+  m_BlendParameter: XStick
   m_BlendParameterY: Blend
   m_MinThreshold: -1
   m_MaxThreshold: 1
@@ -921,6 +921,36 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
+--- !u!206 &20688970
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Backwards
+  m_Childs:
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: b1a5e04ae51004842aba06704a6c2903, type: 3}
+    m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: -1.276609
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 532d1a3f13e990b458c587f77fa5447c, type: 3}
+    m_Threshold: 0.2
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1.5
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  m_BlendParameter: Speed
+  m_BlendParameterY: Blend
+  m_MinThreshold: 0
+  m_MaxThreshold: 0.2
+  m_UseAutomaticThresholds: 0
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
 --- !u!206 &20697064
 BlendTree:
   m_ObjectHideFlags: 3
@@ -931,7 +961,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20616408}
     m_Threshold: 0
-    m_Position: {x: -0.8, y: 0.3}
+    m_Position: {x: 0, y: 0.1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -939,7 +969,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20646016}
     m_Threshold: 0.6
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: 0, y: 0.3}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -947,18 +977,42 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20649724}
     m_Threshold: 0.8
-    m_Position: {x: 0.8, y: 0.3}
+    m_Position: {x: 0, y: 0.6}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Speed
-  m_BlendParameterY: Speed
+  - serializedVersion: 2
+    m_Motion: {fileID: 20688970}
+    m_Threshold: 1
+    m_Position: {x: 0, y: -0.1}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400002, guid: 51a19b6bb68d01e408a8a4f156c99f8e, type: 3}
+    m_Threshold: 1.2
+    m_Position: {x: -0.1, y: 0.003}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 51a19b6bb68d01e408a8a4f156c99f8e, type: 3}
+    m_Threshold: 1.4000001
+    m_Position: {x: 0.1, y: 0.01}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  m_BlendParameter: XStick
+  m_BlendParameterY: YStick
   m_MinThreshold: 0
-  m_MaxThreshold: 0.8
+  m_MaxThreshold: 1.4000001
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 1
 --- !u!206 &20699102
 BlendTree:
   m_ObjectHideFlags: 1
@@ -1428,7 +1482,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110244334}
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.25
@@ -1524,7 +1578,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110244334}
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.25
@@ -1740,7 +1794,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 110254814}
   m_Solo: 0
-  m_Mute: 0
+  m_Mute: 1
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.25
