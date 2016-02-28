@@ -256,6 +256,12 @@ public class ThirdPersonCamera : MonoBehaviour
 			DebugDraw.DrawDebugFrustum(viewFrustum);
 		}
 	}
+
+	void OnAnimatorIK()
+	{
+		// Set the Look At Weight - amount to use look at IK vs using the head's animation
+		follow.Animator.SetLookAtWeight(lookWeight);
+	}
 	
 	void LateUpdate()
 	{		
@@ -301,6 +307,10 @@ public class ThirdPersonCamera : MonoBehaviour
 		// * Targeting *
 		if (leftTrigger > TARGETING_THRESHOLD)
 		{			
+			if (camState != CamStates.Target) 
+			{
+				savedRigToGoal = Vector3.zero;
+			}
 			camState = CamStates.Target;
 
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, widescreen, targetingTime);
@@ -335,9 +345,6 @@ public class ThirdPersonCamera : MonoBehaviour
 			}
 		}
 		
-		// Set the Look At Weight - amount to use look at IK vs using the head's animation
-		follow.Animator.SetLookAtWeight(lookWeight);
-		
 		// Execute camera state
 		switch (camState)
 		{
@@ -363,12 +370,36 @@ public class ThirdPersonCamera : MonoBehaviour
 				Debug.DrawLine(followXform.position, targetPosition, Color.magenta);
 				
 				break;
-			case CamStates.Target:
-				ResetCamera();
-				lookDir = followXform.forward;
-				curLookDir = followXform.forward;
+		case CamStates.Target:
+			ResetCamera ();
+
+				// begin old logic
+				if (savedRigToGoal == Vector3.zero) 
+				{
+					Debug.Log ("set savedrigtogoal");
+					savedRigToGoal = followXform.forward;
+					curLookDir = followXform.forward;
+				}
+				targetPosition = characterOffset + followXform.up * distanceUp - savedRigToGoal * distanceAway;
 				
-				targetPosition = characterOffset + followXform.up * distanceUp - lookDir * distanceAway;
+				// end old logic
+
+
+				// begin new logic
+				/*
+				Vector3 rigToGoalTar = characterOffset - cameraXform.position;
+				rigToGoalTar.y = 0f;
+				Debug.DrawRay(cameraXform.transform.position, rigToGoalTar, Color.red);
+
+				savedRigToGoal = RigToGoalDirection;
+
+				// Still need to track camera behind player even if they aren't using the right stick; achieve this by saving distanceAwayFree every frame
+				if (targetPosition == Vector3.zero)
+				{
+					targetPosition = characterOffset + followXform.up * distanceUp - savedRigToGoal * distanceAway;
+				}
+				*/
+				// end new logic
 				
 				break;
 			case CamStates.FirstPerson:	

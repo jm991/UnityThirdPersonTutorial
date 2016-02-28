@@ -153,7 +153,7 @@ public class CharacterControllerLogic : MonoBehaviour
 			float charSpeed = 0f;
 		
 			// Translate controls stick coordinates into world/cam/character space
-            StickToWorldspace(this.transform, gamecam.transform, ref direction, ref charSpeed, ref charAngle, IsInPivot());		
+			StickToWorldspace(this.transform, gamecam.transform, ref direction, ref charSpeed, ref charAngle, IsInPivot());		
 			
 			// Press B to sprint
 			if (Input.GetButton("Sprint"))
@@ -166,9 +166,15 @@ public class CharacterControllerLogic : MonoBehaviour
 				speed = charSpeed;
 				gamecam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(gamecam.GetComponent<Camera>().fieldOfView, NORMAL_FOV, fovDampTime * Time.deltaTime);		
 			}
-			
+
+			if (gamecam.CamState != ThirdPersonCamera.CamStates.Target) 
+			{
+				animator.SetFloat ("Direction", direction, directionDampTime, Time.deltaTime);
+			}
 			animator.SetFloat("Speed", speed, speedDampTime, Time.deltaTime);
-			animator.SetFloat("Direction", direction, directionDampTime, Time.deltaTime);
+			animator.SetFloat("XStick", leftX, speedDampTime, Time.deltaTime);
+			animator.SetFloat("YStick", leftY, directionDampTime, Time.deltaTime);
+			animator.SetFloat("StickAngle", Mathf.Atan2(leftX, leftY) * Mathf.Rad2Deg);
 			
 			if (speed > LocomotionThreshold)	// Dead zone
 			{
@@ -191,8 +197,9 @@ public class CharacterControllerLogic : MonoBehaviour
 	void FixedUpdate()
 	{							
 		// Rotate character model if stick is tilted right or left, but only if character is moving in that direction
-		if (IsInLocomotion() && gamecam.CamState != ThirdPersonCamera.CamStates.Free && !IsInPivot() && ((direction >= 0 && leftX >= 0) || (direction < 0 && leftX < 0)))
+		if (IsInLocomotion() && gamecam.CamState == ThirdPersonCamera.CamStates.Behind  && !IsInPivot() && ((direction >= 0 && leftX >= 0) || (direction < 0 && leftX < 0)))
 		{
+			Debug.Log ("Rotating");
 			Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
 			Quaternion deltaRotation = Quaternion.Euler(rotationAmount * Time.deltaTime);
         	this.transform.rotation = (this.transform.rotation * deltaRotation);
@@ -244,15 +251,15 @@ public class CharacterControllerLogic : MonoBehaviour
 	
 	public bool IsInPivot()
 	{
-		return stateInfo.nameHash == m_LocomotionPivotLId || 
-			stateInfo.nameHash == m_LocomotionPivotRId || 
+		return stateInfo.fullPathHash == m_LocomotionPivotLId || 
+			stateInfo.fullPathHash == m_LocomotionPivotRId || 
 			transInfo.nameHash == m_LocomotionPivotLTransId || 
 			transInfo.nameHash == m_LocomotionPivotRTransId;
 	}
 
     public bool IsInLocomotion()
-    {
-        return stateInfo.nameHash == m_LocomotionId;
+    {		
+		return stateInfo.fullPathHash == m_LocomotionId;
     }
 	
 	public void StickToWorldspace(Transform root, Transform camera, ref float directionOut, ref float speedOut, ref float angleOut, bool isPivoting)
@@ -261,7 +268,7 @@ public class CharacterControllerLogic : MonoBehaviour
 				
         Vector3 stickDirection = new Vector3(leftX, 0, leftY);
 		
-		speedOut = stickDirection.sqrMagnitude;		
+		speedOut = stickDirection.sqrMagnitude;
 
         // Get camera rotation
         Vector3 CameraDirection = camera.forward;
