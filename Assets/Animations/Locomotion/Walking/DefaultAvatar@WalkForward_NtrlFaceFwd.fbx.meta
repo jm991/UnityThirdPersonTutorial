@@ -530,7 +530,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: WalkRight_45Angle
+      name: WalkLeft_45Angle
       takeName: _1_a_U1_M_P_WalkForward_NtrlFaceFwd__Fb_p0_No_0_PJ_3
       firstFrame: 215
       lastFrame: 245
@@ -712,7 +712,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: WalkLeft_45Angle
+      name: WalkRight_45Angle
       takeName: _1_a_U1_M_P_WalkForward_NtrlFaceFwd__Fb_p0_No_0_PJ_3
       firstFrame: 215
       lastFrame: 245

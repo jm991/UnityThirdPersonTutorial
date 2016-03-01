@@ -681,12 +681,12 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 88
     - serializedVersion: 16
-      name: RunLeft_45Angle
+      name: RunRight_45Angle
       takeName: _24_a_U1_M_P_RunForward_NtrlFaceFwd__Fb_p0_No_0_PJ_10
       firstFrame: 336
       lastFrame: 354
       wrapMode: 0
-      orientationOffsetY: 45
+      orientationOffsetY: -45
       level: 0
       cycleOffset: 0
       loop: 0
@@ -700,7 +700,7 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
-      mirror: 1
+      mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
@@ -863,7 +863,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 88
     - serializedVersion: 16
-      name: RunRight_45Angle
+      name: RunLeft_45Angle
       takeName: _24_a_U1_M_P_RunForward_NtrlFaceFwd__Fb_p0_No_0_PJ_10
       firstFrame: 336
       lastFrame: 354
@@ -882,7 +882,7 @@ ModelImporter:
       keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
       heightFromFeet: 1
-      mirror: 1
+      mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []

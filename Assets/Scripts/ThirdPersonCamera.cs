@@ -380,7 +380,8 @@ public class ThirdPersonCamera : MonoBehaviour
 					savedRigToGoal = followXform.forward;
 					curLookDir = followXform.forward;
 				}
-				targetPosition = characterOffset + followXform.up * distanceUp - savedRigToGoal * distanceAway;
+				// distanceUp is not included in Target camera state - if you look at the original Zelda games, the camera goes directly level to the player's head
+				targetPosition = characterOffset + followXform.up - savedRigToGoal * distanceAway;
 				
 				// end old logic
 
