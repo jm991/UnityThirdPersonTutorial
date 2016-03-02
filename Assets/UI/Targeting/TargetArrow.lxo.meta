@@ -8,15 +8,29 @@ ModelImporter:
     100000: Mesh
     100002: Render
     100004: //RootNode
+    100006: -720_Twist
+    100008: 720_Twist
+    100010: Squash
+    100012: SquashTiny
+    100014: Stretch
+    100016: TargetJumpLeft
+    100018: TargetJumpRight
     400000: Mesh
     400002: Render
     400004: //RootNode
+    400006: -720_Twist
+    400008: 720_Twist
+    400010: Squash
+    400012: SquashTiny
+    400014: Stretch
+    400016: TargetJumpLeft
+    400018: TargetJumpRight
     2300000: Mesh
     3300000: Mesh
     4300000: Mesh
     9500000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -29,7 +43,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -70,7 +84,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    rootMotionBoneName: 
+    rootMotionBoneName: Mesh
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
