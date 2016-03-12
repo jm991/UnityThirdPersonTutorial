@@ -579,11 +579,11 @@ public class ThirdPersonCamera : MonoBehaviour
 	public static bool IsVisibleFrom(Renderer renderer, Camera camera)
 	{
 		// Can also consider using renderer.isVisible based on performance and shadow settings
-		Plane[] planes = GeometryUtility.CalculateFrustumPlanes (camera);
-		GeometryUtility.TestPlanesAABB (planes, renderer.bounds);
+		Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
+		return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
 	}
 
-	public static bool IsOccluded(CapsuleCollider target, Camera camera)
+	public static bool IsOccluded(Collider target, Camera camera)
 	{
 		// Note: this is a fairly inaccurate measure of occlusion since it assumes the object is a single point
 		// Proper queries fill objects with colour, then perform a full render and check the render for the color of the object in question
@@ -593,6 +593,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
 		// Calculate Ray direction
 		Vector3 direction = camera.transform.position - target.transform.position; 	
+		DebugDraw.ArrowDebug(camera.transform.position, direction);
+
 		if (Physics.Raycast(target.transform.position, direction, out hit))
 		{
 			if (hit.collider.tag != "MainCamera") //hit something else before the camera
