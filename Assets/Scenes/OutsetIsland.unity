@@ -158,6 +158,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 13700000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -38.88
@@ -188,7 +192,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -225,6 +229,10 @@ Prefab:
     - target: {fileID: 13700000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
       propertyPath: m_DirtyAABB
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dbf67c8d130907c46938bbe943ddef6f, type: 3}
@@ -1025,11 +1033,15 @@ MonoBehaviour:
   - {fileID: 819162416}
   - {fileID: 1035763813}
   - {fileID: 174050228}
+  currentTarget: {fileID: 0}
   targetTag: Targetable
   playerTag: Player
   visibleTargets: []
   animator: {fileID: 0}
+  lockedTrigger: Locked
+  unlockedTrigger: Unlocked
   appearTrigger: Locked
+  disappearTrigger: Disappear
 --- !u!114 &1237121170 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400002, guid: 79efd4c2b57a6d24f9555a5851c00ad1,
@@ -1453,6 +1465,18 @@ Prefab:
     - target: {fileID: 400138, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}

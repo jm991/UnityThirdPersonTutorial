@@ -33,6 +33,8 @@ public class TargetingSystem : MonoBehaviour
 	private CharacterControllerLogic player;
 	[SerializeField]
 	private GameObject[] targets;
+    [SerializeField]
+    private GameObject currentTarget;
 	[SerializeField]
 	private string targetTag = "Targetable";
     [SerializeField]
@@ -44,7 +46,13 @@ public class TargetingSystem : MonoBehaviour
 
     // Animator values
     [SerializeField]
-    private string appearTrigger = "Locked";
+    private string lockedTrigger = "Locked";
+    [SerializeField]
+    private string unlockedTrigger = "Unlocked";
+    [SerializeField]
+    private string appearTrigger = "Appear";
+    [SerializeField]
+    private string disappearTrigger = "Disappear";
 
 	#endregion
 
@@ -97,11 +105,29 @@ public class TargetingSystem : MonoBehaviour
         if (visibleTargets.Count > 1)
         {
             // Sort by distance to player
-            visibleTargets = visibleTargets.OrderBy(x => Vector2.Distance(player.transform.position, x.transform.position)).ToList();
+            visibleTargets = visibleTargets.OrderBy (x => Vector2.Distance (player.transform.position, x.transform.position)).ToList ();
+
+            // Check and see if the target changed so we know whether to play the appearing animation
+            bool targetChanged = false;
+            if (visibleTargets[0] != currentTarget)
+            {
+                targetChanged = true;
+            }
+
+            currentTarget = visibleTargets[0];
 
             // Position the cursor above the closest target
-            this.transform.position = visibleTargets[0].transform.position + new Vector3(0, visibleTargets[0].GetComponent<Collider>().bounds.size.y);
-            animator.SetTrigger(appearTrigger);
+            this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
+
+            if (targetChanged)
+            {
+                animator.SetTrigger(appearTrigger);
+            }
+        }
+        else
+        {
+            // Hide the cursor
+            animator.SetTrigger(disappearTrigger);
         }
 	}
 

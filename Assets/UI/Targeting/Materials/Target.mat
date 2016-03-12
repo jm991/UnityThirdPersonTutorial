@@ -10,7 +10,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 5725d76d3bb55714b85292dc4a0d12b0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 4000
   stringTagMap: {}
   m_SavedProperties:
     serializedVersion: 2
@@ -81,6 +81,10 @@ Material:
     m_Floats:
       data:
         first:
+          name: _Scale
+        second: 1
+      data:
+        first:
           name: _SrcBlend
         second: 1
       data:
@@ -91,6 +95,10 @@ Material:
         first:
           name: _Cutoff
         second: 0.5
+      data:
+        first:
+          name: _Shininess
+        second: 0.7
       data:
         first:
           name: PixelSnap
@@ -131,6 +139,14 @@ Material:
         first:
           name: _Metallic
         second: 0
+      data:
+        first:
+          name: _InvFade
+        second: 2.02
+      data:
+        first:
+          name: _Opacity
+        second: 1
     m_Colors:
       data:
         first:
@@ -140,3 +156,15 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 0, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 1, g: 1, b: 1, a: 0}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: 1, b: 0, a: 1}
+      data:
+        first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}

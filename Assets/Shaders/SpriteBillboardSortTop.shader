@@ -4,6 +4,7 @@
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
+		_Scale ("Scale", Float) = 1
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
 
@@ -47,14 +48,16 @@
 			};
 			
 			fixed4 _Color;
+			float _Scale;
 
-			v2f vert(appdata_t IN)
+			v2f vert(appdata_full IN)
 			{
 				v2f OUT;
 				//OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
-				OUT.vertex = mul(UNITY_MATRIX_P,
+				OUT.vertex = mul( UNITY_MATRIX_P,// IN.vertex);
+						//mul(UNITY_MATRIX_P,
                          mul(UNITY_MATRIX_MV, float4(0.0, 0.0, 0.0, 1.0))
-                        + float4(IN.vertex.x, IN.vertex.y, 0.0, 0.0));
+                        + float4(_Scale * IN.vertex.x, _Scale * IN.vertex.y, 0.0, 0.0));
 
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
