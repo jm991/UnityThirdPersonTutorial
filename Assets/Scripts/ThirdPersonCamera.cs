@@ -98,6 +98,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float compensationOffset = 0.2f;
 	[SerializeField]
 	private CamStates startingState = CamStates.Free;
+    [SerializeField]
+    private TargetingSystem targetingSystem;
 	
 	
 	// Smoothing and damping
@@ -203,6 +205,10 @@ public class ThirdPersonCamera : MonoBehaviour
 			Debug.LogError("Parent camera to empty GameObject.", this);
 		}
 		
+        if (targetingSystem == null)
+        {
+            targetingSystem = GameObject.FindObjectOfType<TargetingSystem>();
+        }
 		follow = GameObject.FindWithTag("Player").GetComponent<CharacterControllerLogic>();
 		followXform = GameObject.FindWithTag("Player").transform;
 		
@@ -345,6 +351,28 @@ public class ThirdPersonCamera : MonoBehaviour
 			}
 		}
 		
+        // If there's a target, the camera points between the two characters
+        if (targetingSystem.HasTarget)
+        {
+            Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
+            Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
+            Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
+            Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
+
+            // characterOffset = halfwayPoint;
+
+            // Find 30 degree left and right offset from targetToPlayer
+
+            Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+            Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+            Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
+            Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
+
+            float rightangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), right);
+            float leftangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), left);
+            Debug.Log ("left: " + leftangle + " right: " + rightangle);
+        }
+
 		// Execute camera state
 		switch (camState)
 		{
@@ -370,38 +398,71 @@ public class ThirdPersonCamera : MonoBehaviour
 				Debug.DrawLine(followXform.position, targetPosition, Color.magenta);
 				
 				break;
-		case CamStates.Target:
-			ResetCamera ();
+            case CamStates.Target:
+                ResetCamera ();
 
-				// begin old logic
-				if (savedRigToGoal == Vector3.zero) 
-				{
-					Debug.Log ("set savedrigtogoal");
-					savedRigToGoal = followXform.forward;
-					curLookDir = followXform.forward;
-				}
-				// distanceUp is not included in Target camera state - if you look at the original Zelda games, the camera goes directly level to the player's head
-				targetPosition = characterOffset + followXform.up - savedRigToGoal * distanceAway;
-				
-				// end old logic
+                if (savedRigToGoal == Vector3.zero)
+                {
+                    Debug.Log ("set savedrigtogoal");
+                    savedRigToGoal = followXform.forward;
+                    curLookDir = followXform.forward;
+                }
+
+                // If there's a target, the camera points between the two characters
+                if (targetingSystem.HasTarget)
+                {
+                    Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
+                    Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
+                    Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
+                    Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
+
+                    // characterOffset = halfwayPoint;
+
+                    // Find 30 degree left and right offset from targetToPlayer
+
+                    Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+                    Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
+                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
+                    Debug.DrawRay (this.transform.position, RigToGoalDirection * 2f, Color.green);
+                    // ORIGINAL
+                    //characterOffset = halfwayPoint + (distanceUp * followXform.up);
+                    //Debug.Log ("dot: " + Vector3.Dot (followXform.forward, (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized));
+                    float rightDot = Vector3.Dot ((targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized, right);
+                    float leftDot = Vector3.Dot ((targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized, left);
+                    // See which is smaller
+                    if (leftDot < rightDot)
+                    {
+                        savedRigToGoal = left;
+                        Debug.Log("chose left, left dot: " + leftDot + " right dot: " + rightDot);
+                    } 
+                    else
+                    {
+                        Debug.Log("chose right, left dot: " + leftDot + " right dot: " + rightDot);
+                        savedRigToGoal = left;
+                    }
+
+                    //savedRigToGoal = -1f * left;
 
 
-				// begin new logic
-				/*
-				Vector3 rigToGoalTar = characterOffset - cameraXform.position;
-				rigToGoalTar.y = 0f;
-				Debug.DrawRay(cameraXform.transform.position, rigToGoalTar, Color.red);
+                    targetPosition = characterOffset + followXform.up - savedRigToGoal * distanceAway;
+                    //lookAt = right;
 
-				savedRigToGoal = RigToGoalDirection;
+                    //targetPosition = characterOffset + followXform.up - (targetingSystem.CurrentTarget.transform.position - followXform.position) * distanceAway;
+                    //lookAt = Vector3.Lerp(lookAt, halfwayPoint, camSmoothDampTime * Time.deltaTime);
 
-				// Still need to track camera behind player even if they aren't using the right stick; achieve this by saving distanceAwayFree every frame
-				if (targetPosition == Vector3.zero)
-				{
-					targetPosition = characterOffset + followXform.up * distanceUp - savedRigToGoal * distanceAway;
-				}
-				*/
-				// end new logic
-				
+
+                    // Smoothly transition look direction towards firstPersonCamPos when entering first person mode
+                    //lookAt = Vector3.Lerp(targetPosition + followXform.forward, this.transform.position + this.transform.forward, camSmoothDampTime * Time.deltaTime);
+
+                    //cameraXform.RotateAround(halfwayPoint, followXform.up, freeRotationDegreePerSecond * 30f);
+                } 
+                else
+                {
+                    // distanceUp is not included in Target camera state - if you look at the original Zelda games, the camera goes directly level to the player's head
+                    targetPosition = characterOffset + followXform.up - savedRigToGoal * distanceAway;
+                }
+								
 				break;
 			case CamStates.FirstPerson:	
 				// Looking up and down

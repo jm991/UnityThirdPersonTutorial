@@ -53,8 +53,21 @@ public class TargetingSystem : MonoBehaviour
     private string appearTrigger = "Appear";
     [SerializeField]
     private string disappearTrigger = "Disappear";
+    [SerializeField]
+    private float targetingCamAngle = 30.0f;
 
 	#endregion
+
+
+    #region Properties (public)
+
+    public float TargetingCamAngle { get { return targetingCamAngle; } }
+
+    public bool HasTarget { get { return currentTarget != null; } } 
+
+    public GameObject CurrentTarget { get { return currentTarget; } }
+
+    #endregion
 
 
     #region Unity event functions
@@ -118,6 +131,7 @@ public class TargetingSystem : MonoBehaviour
 
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
+            Debug.Log ("Updating position");
 
             if (targetChanged)
             {
