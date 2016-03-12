@@ -1,15 +1,34 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.AttachToProcess" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Interface\HoveringTexture.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CharacterControllerLogic.cs">
     <Files>
       <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="157" Column="4" />
-      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="373" Column="25" />
+      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\SceneViewCameraFollower.cs" Line="1" Column="1" />
       <File FileName="Assets\Effects\BarsEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets\Effects\ImageEffects.cs" Line="21" Column="45" />
+      <File FileName="Assets\Effects\ImageEffects.cs" Line="1" Column="1" />
       <File FileName="Assets\Effects\SSAOEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Interface\HoveringTexture.cs" Line="49" Column="24" />
+      <File FileName="Assets\Scripts\Interface\HoveringTexture.cs" Line="7" Column="2" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="UnityThirdPersonTutorial" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="CharacterControllerLogic.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="Assembly-CSharp-Editor" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State name="__root__">
+          <Node name="UnityThirdPersonTutorial" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

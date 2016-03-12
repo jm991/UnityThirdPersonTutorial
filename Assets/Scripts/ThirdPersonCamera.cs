@@ -572,4 +572,37 @@ public class ThirdPersonCamera : MonoBehaviour
 	}
 	
 	#endregion Methods
+
+
+	#region Utilities (static)
+
+	public static bool IsVisibleFrom(Renderer renderer, Camera camera)
+	{
+		// Can also consider using renderer.isVisible based on performance and shadow settings
+		Plane[] planes = GeometryUtility.CalculateFrustumPlanes (camera);
+		GeometryUtility.TestPlanesAABB (planes, renderer.bounds);
+	}
+
+	public static bool IsOccluded(CapsuleCollider target, Camera camera)
+	{
+		// Note: this is a fairly inaccurate measure of occlusion since it assumes the object is a single point
+		// Proper queries fill objects with colour, then perform a full render and check the render for the color of the object in question
+		// Improvements to raycasting method use a Monte Carlo approach where a ray is cast to a differnet point on the object every update
+		RaycastHit hit;
+		bool hitSomething = false;
+
+		// Calculate Ray direction
+		Vector3 direction = camera.transform.position - target.transform.position; 	
+		if (Physics.Raycast(target.transform.position, direction, out hit))
+		{
+			if (hit.collider.tag != "MainCamera") //hit something else before the camera
+			{
+				hitSomething = true;
+			}
+		}
+
+		return hitSomething;
+	}
+
+	#endregion
 }
