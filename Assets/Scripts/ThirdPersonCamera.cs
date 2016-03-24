@@ -315,7 +315,10 @@ public class ThirdPersonCamera : MonoBehaviour
 		{			
 			if (camState != CamStates.Target) 
 			{
-				savedRigToGoal = Vector3.zero;
+                savedRigToGoal = Vector3.zero;
+
+                // If there is a target displayed on screen when entering this mode, we need to lock on it
+                targetingSystem.Lock();
 			}
 			camState = CamStates.Target;
 
@@ -324,6 +327,9 @@ public class ThirdPersonCamera : MonoBehaviour
 		}
 		else
 		{			
+            // Release any targets
+            targetingSystem.Unlock();
+
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
 			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
 			
@@ -370,7 +376,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
             float rightangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), right);
             float leftangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), left);
-            Debug.Log ("left: " + leftangle + " right: " + rightangle);
+            // Debug.Log ("left: " + leftangle + " right: " + rightangle);
         }
 
 		// Execute camera state
@@ -434,11 +440,11 @@ public class ThirdPersonCamera : MonoBehaviour
                     if (leftDot < rightDot)
                     {
                         savedRigToGoal = left;
-                        Debug.Log("chose left, left dot: " + leftDot + " right dot: " + rightDot);
+                        // Debug.Log("chose left, left dot: " + leftDot + " right dot: " + rightDot);
                     } 
                     else
                     {
-                        Debug.Log("chose right, left dot: " + leftDot + " right dot: " + rightDot);
+                        // Debug.Log("chose right, left dot: " + leftDot + " right dot: " + rightDot);
                         savedRigToGoal = left;
                     }
 

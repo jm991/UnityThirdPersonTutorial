@@ -1,20 +1,57 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.AttachToProcess" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TargetArrow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AnimateShader.cs">
     <Files>
-      <File FileName="Assets\Scripts\TargetArrow.cs" Line="61" Column="27" />
-      <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="158" Column="24" />
-      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="597" Column="9" />
+      <File FileName="Assets\Scripts\TargetingSystem.cs" Line="183" Column="22" />
+      <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="227" Column="142" />
+      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="326" Column="36" />
       <File FileName="Assets\Scripts\SceneViewCameraFollower.cs" Line="1" Column="1" />
       <File FileName="Assets\Effects\BarsEffect.cs" Line="1" Column="1" />
       <File FileName="Assets\Effects\ImageEffects.cs" Line="1" Column="1" />
       <File FileName="Assets\Effects\SSAOEffect.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Interface\HoveringTexture.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\DebugDraw.cs" Line="90" Column="3" />
+      <File FileName="Assets\Scripts\Interface\HoveringTexture.cs" Line="4" Column="1" />
+      <File FileName="Assets\Scripts\DebugDraw.cs" Line="18" Column="1" />
+      <File FileName="..\..\..\Desktop\Old OneDrive\Programs\Programs to install\Unity5\builtin_shaders-5.3.3f1\CGIncludes\UnityCG.cginc" Line="38" Column="19" />
+      <File FileName="Assets\Shaders\SpriteBillboardSortTop.shader" Line="1" Column="39" />
+      <File FileName="Assets\Shaders\UnlitShadows.shader" Line="35" Column="14" />
+      <File FileName="Assets\Scripts\AICharacter.cs" Line="4" Column="28" />
+      <File FileName="Assets\Scripts\Sight.cs" Line="4" Column="35" />
+      <File FileName="Assets\Scripts\Targetable.cs" Line="6" Column="2" />
+      <File FileName="Assets\Scripts\AnimateShader.cs" Line="7" Column="5" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="UnityThirdPersonTutorial" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="AnimateShader.cs" selected="True" />
+              </Node>
+              <Node name="Shaders" expanded="True" />
+            </Node>
+            <Node name="Assembly-CSharp-Editor" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>GeometryUtility.TestPlanesAABB(planes, renderer.bounds)</Value>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State name="__root__">
+          <Node name="UnityThirdPersonTutorial" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="82" column="1" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\ThirdPersonCamera.cs" line="326" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets\Scripts\TargetingSystem.cs" line="96" offsetX="263" offsetY="1520" expression="targets" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

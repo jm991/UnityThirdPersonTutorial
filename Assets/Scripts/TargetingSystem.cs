@@ -32,17 +32,19 @@ public class TargetingSystem : MonoBehaviour
 	[SerializeField]
 	private CharacterControllerLogic player;
 	[SerializeField]
-	private GameObject[] targets;
+    private List<Targetable> targets;
     [SerializeField]
-    private GameObject currentTarget;
+    private Targetable currentTarget;
 	[SerializeField]
 	private string targetTag = "Targetable";
     [SerializeField]
     private string playerTag = "Player";
     [SerializeField]
-    private List<GameObject> visibleTargets;
+    private List<Targetable> visibleTargets;
     [SerializeField]
     private Animator animator;
+    [SerializeField]
+    private bool locked = false;
 
     // Animator values
     [SerializeField]
@@ -65,7 +67,9 @@ public class TargetingSystem : MonoBehaviour
 
     public bool HasTarget { get { return currentTarget != null; } } 
 
-    public GameObject CurrentTarget { get { return currentTarget; } }
+    public bool IsTargetLocked { get { return IsTargetLocked != null; } } 
+
+    public Targetable CurrentTarget { get { return currentTarget; } }
 
     #endregion
 
@@ -76,7 +80,7 @@ public class TargetingSystem : MonoBehaviour
 	void Start () 
 	{
         animator = GetComponent<Animator>();
-        visibleTargets = new List<GameObject>();
+        visibleTargets = new List<Targetable>();
 
         if (player == null)
         {
@@ -91,7 +95,15 @@ public class TargetingSystem : MonoBehaviour
 		// Find all targetable objects in the scene
 		if (targets == null) 
 		{
-			targets = GameObject.FindGameObjectsWithTag(targetTag);
+			GameObject[] targetObjects = GameObject.FindGameObjectsWithTag(targetTag);
+
+            foreach (GameObject target in targetObjects)
+            {
+                if (target.GetComponent<Targetable>())
+                {
+                    targets.Add (target.GetComponent<Targetable>());
+                }
+            }
 		}
 	}
 	
@@ -103,7 +115,7 @@ public class TargetingSystem : MonoBehaviour
         visibleTargets.Clear();
 
 		// For all the targets in the scene, test to see if they are in the current frustrum, not occluded, and visible by the player (facing)
-		foreach (GameObject target in targets) 
+        foreach (Targetable target in targets) 
 		{
             Debug.DrawLine(player.transform.position, target.transform.position, Color.blue);
 
@@ -115,7 +127,7 @@ public class TargetingSystem : MonoBehaviour
 			}
 		}
 
-        if (visibleTargets.Count > 1)
+        if (visibleTargets.Count > 0)
         {
             // Sort by distance to player
             visibleTargets = visibleTargets.OrderBy (x => Vector2.Distance (player.transform.position, x.transform.position)).ToList ();
@@ -131,17 +143,20 @@ public class TargetingSystem : MonoBehaviour
 
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
-            Debug.Log ("Updating position");
+            //Debug.Log ("Updating position");
 
             if (targetChanged)
             {
                 animator.SetTrigger(appearTrigger);
+                Debug.Log ("Appear trigger");
             }
         }
         else
         {
             // Hide the cursor
-            animator.SetTrigger(disappearTrigger);
+            //animator.SetTrigger(disappearTrigger);
+
+            Unlock ();
         }
 	}
 
@@ -150,5 +165,43 @@ public class TargetingSystem : MonoBehaviour
 
 	#region Methods (private)
 
+    private void UpdateLock()
+    {
+        if (locked && currentTarget)
+        {
+            // Make sure in sight still
+        }
+    }
+
 	#endregion
+
+
+    #region Methods (public)
+
+    public void Lock()
+    {        
+        if (HasTarget)
+        {
+            locked = true;
+            animator.SetTrigger(lockedTrigger);
+        }
+    }
+
+    public void Unlock()
+    {  
+        if (HasTarget)
+        {
+            // If we don't have a target anymore, we should unlock
+            locked = false;
+            currentTarget = null;
+
+            //animator.ResetTrigger (lockedTrigger);
+            animator.SetTrigger(disappearTrigger);
+            animator.ResetTrigger (disappearTrigger);
+            Debug.Log ("Disappear trigger");
+        }
+    }
+
+
+    #endregion
 }

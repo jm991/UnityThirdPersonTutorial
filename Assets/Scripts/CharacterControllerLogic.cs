@@ -40,7 +40,9 @@ public class CharacterControllerLogic : MonoBehaviour
 	[SerializeField]
 	private float directionSpeed = 1.5f;
 	[SerializeField]
-	private float directionDampTime = 0.25f;
+    private float directionDampTime = 0.25f;
+    [SerializeField]
+    private float rotationDampTime = 25f;
 	[SerializeField]
 	private float speedDampTime = 0.05f;
 	[SerializeField]
@@ -50,7 +52,9 @@ public class CharacterControllerLogic : MonoBehaviour
 	[SerializeField]
 	private CapsuleCollider capCollider;
 	[SerializeField]
-	private float jumpDist = 1f;
+    private float jumpDist = 1f;
+    [SerializeField]
+    private TargetingSystem targetingSystem;
 	
 	
 	// Private global only
@@ -109,7 +113,12 @@ public class CharacterControllerLogic : MonoBehaviour
 	{
 		animator = GetComponent<Animator>();
 		capCollider = GetComponent<CapsuleCollider>();
-		capsuleHeight = capCollider.height;
+        capsuleHeight = capCollider.height;
+
+        if (targetingSystem == null)
+        {
+            targetingSystem = GameObject.FindObjectOfType<TargetingSystem>();
+        }
 
 		if(animator.layerCount >= 2)
 		{
@@ -199,11 +208,29 @@ public class CharacterControllerLogic : MonoBehaviour
 		// Rotate character model if stick is tilted right or left, but only if character is moving in that direction
 		if (IsInLocomotion() && gamecam.CamState == ThirdPersonCamera.CamStates.Behind  && !IsInPivot() && ((direction >= 0 && leftX >= 0) || (direction < 0 && leftX < 0)))
 		{
-			Debug.Log ("Rotating");
+			Debug.Log ("behind Rotating");
 			Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
 			Quaternion deltaRotation = Quaternion.Euler(rotationAmount * Time.deltaTime);
         	this.transform.rotation = (this.transform.rotation * deltaRotation);
 		}		
+
+        if (gamecam.CamState == ThirdPersonCamera.CamStates.Target /*&& ((direction >= 0 && leftX >= 0) || (direction < 0 && leftX < 0))*/ && targetingSystem.HasTarget)
+        {
+            //Debug.Log ("target Rotating");
+            //this.transform.rotation.SetFromToRotation(this.transform.rotation.eulerAngles, targetingSystem.CurrentTarget.transform.position - this.transform.position);
+
+
+            Vector3 lookPos = targetingSystem.CurrentTarget.transform.position - this.transform.position;
+            lookPos.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(lookPos);
+            //float falloff = Vector3.Dot (gamecam.transform.forward, lookPos);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation/* Quaternion.Euler(rotation.eulerAngles * falloff)*/, Time.deltaTime * rotationDampTime);
+
+            //Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, -rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
+            //Quaternion deltaRotation = Quaternion.Euler(rotationAmount * Time.deltaTime);
+            //this.transform.rotation = (this.transform.rotation * deltaRotation);            
+        }
+
 		
 		if (IsInJump())
 		{

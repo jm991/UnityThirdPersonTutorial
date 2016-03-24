@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: TargetingDisappear
+  m_Name: TargetingYellow
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -21,43 +21,18 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 1
-        inSlope: 6
-        outSlope: 6
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       - time: 0.33333334
-        value: 3
-        inSlope: 1.4999999
-        outSlope: 1.4999999
-        tangentMode: 10
-      - time: 1
         value: 1
-        inSlope: -3.0000002
-        outSlope: -3.0000002
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: animScale
-    path: 
-    classID: 114
-    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: -3
-        outSlope: -3
-        tangentMode: 10
-      - time: 0.33333334
-        value: 0
-        inSlope: -3
-        outSlope: -3
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: animColor.a
+    attribute: animColor.r
     path: 
     classID: 114
     script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
@@ -66,18 +41,53 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: 3
+        outSlope: 3
         tangentMode: 10
       - time: 0.33333334
-        value: 0
-        inSlope: 0
-        outSlope: 0
+        value: 1
+        inSlope: 3
+        outSlope: 3
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: animColor.g
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      - time: 0.33333334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: animColor.b
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0.33333334
+        value: 1
+        inSlope: -1.5000001
+        outSlope: -1.5000001
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: animColor.a
     path: 
     classID: 114
     script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
@@ -90,7 +100,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - path: 0
-      attribute: 697424879
+      attribute: 2998903001
       script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
       classID: 114
       customType: 0
@@ -102,7 +112,13 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
     - path: 0
-      attribute: 2998903001
+      attribute: 3747759154
+      script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
+      classID: 114
+      customType: 0
+      isPPtrCurve: 0
+    - path: 0
+      attribute: 3268760662
       script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
       classID: 114
       customType: 0
@@ -113,7 +129,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: 0.33333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -134,43 +150,18 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 1
-        inSlope: 6
-        outSlope: 6
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       - time: 0.33333334
-        value: 3
-        inSlope: 1.4999999
-        outSlope: 1.4999999
-        tangentMode: 10
-      - time: 1
         value: 1
-        inSlope: -3.0000002
-        outSlope: -3.0000002
+        inSlope: 0
+        outSlope: 0
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: animScale
-    path: 
-    classID: 114
-    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - time: 0
-        value: 1
-        inSlope: -3
-        outSlope: -3
-        tangentMode: 10
-      - time: 0.33333334
-        value: 0
-        inSlope: -3
-        outSlope: -3
-        tangentMode: 10
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: animColor.a
+    attribute: animColor.r
     path: 
     classID: 114
     script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
@@ -179,18 +170,53 @@ AnimationClip:
       m_Curve:
       - time: 0
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: 3
+        outSlope: 3
         tangentMode: 10
       - time: 0.33333334
-        value: 0
-        inSlope: 0
-        outSlope: 0
+        value: 1
+        inSlope: 3
+        outSlope: 3
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: animColor.g
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      - time: 0.33333334
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: animColor.b
+    path: 
+    classID: 114
+    script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0.33333334
+        value: 1
+        inSlope: -1.5000001
+        outSlope: -1.5000001
+        tangentMode: 10
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: animColor.a
     path: 
     classID: 114
     script: {fileID: 11500000, guid: be3cebbd78221e8478d3152ceb405e15, type: 3}
