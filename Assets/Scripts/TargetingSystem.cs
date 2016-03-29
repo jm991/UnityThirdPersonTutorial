@@ -47,6 +47,7 @@ public class TargetingSystem : MonoBehaviour
     private Animator animator;
     [SerializeField]
     private bool locked = false;
+    private bool forceUnlock = false;
 
     // Animator values
     [SerializeField]
@@ -221,6 +222,7 @@ public class TargetingSystem : MonoBehaviour
             // If we don't have a target anymore, we should unlock
             locked = false;
             //currentTarget = null;
+            forceUnlock = true;
 
             //animator.ResetTrigger (lockedTrigger);
             animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);
