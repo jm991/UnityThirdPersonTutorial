@@ -1000,6 +1000,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  gamecam: {fileID: 0}
   targets:
   - {fileID: 819162426}
   - {fileID: 1035763822}
@@ -1011,9 +1012,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   locked: 0
   lockedTrigger: Locked
+  lockingAnimation: Locking
   unlockedTrigger: Unlocked
   appearTrigger: Locked
   disappearTrigger: Disappear
+  appearAnimation: Appear
+  disappearAnimation: Disappear
   targetingCamAngle: 30
 --- !u!114 &1216612386
 MonoBehaviour:

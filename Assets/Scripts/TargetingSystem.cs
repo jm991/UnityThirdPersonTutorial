@@ -30,7 +30,9 @@ public class TargetingSystem : MonoBehaviour
 
 	// Inspector serialized
 	[SerializeField]
-	private CharacterControllerLogic player;
+    private CharacterControllerLogic player;
+    [SerializeField]
+    private ThirdPersonCamera gamecam;
 	[SerializeField]
     private List<Targetable> targets;
     [SerializeField]
@@ -50,11 +52,17 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField]
     private string lockedTrigger = "Locked";
     [SerializeField]
+    private string lockingAnimation = "Locking";
+    [SerializeField]
     private string unlockedTrigger = "Unlocked";
     [SerializeField]
     private string appearTrigger = "Appear";
     [SerializeField]
     private string disappearTrigger = "Disappear";
+    [SerializeField]
+    private string appearAnimation = "Appear";
+    [SerializeField]
+    private string disappearAnimation = "Disappear";
     [SerializeField]
     private float targetingCamAngle = 30.0f;
 
@@ -67,7 +75,7 @@ public class TargetingSystem : MonoBehaviour
 
     public bool HasTarget { get { return currentTarget != null; } } 
 
-    public bool IsTargetLocked { get { return IsTargetLocked != null; } } 
+    // public bool IsTargetLocked { get { return IsTargetLocked != null; } } 
 
     public Targetable CurrentTarget { get { return currentTarget; } }
 
@@ -81,6 +89,11 @@ public class TargetingSystem : MonoBehaviour
 	{
         animator = GetComponent<Animator>();
         visibleTargets = new List<Targetable>();
+
+        if (gamecam == null)
+        {
+            gamecam = GameObject.FindObjectOfType<ThirdPersonCamera>();
+        }
 
         if (player == null)
         {
@@ -134,29 +147,35 @@ public class TargetingSystem : MonoBehaviour
 
             // Check and see if the target changed so we know whether to play the appearing animation
             bool targetChanged = false;
-            if (visibleTargets[0] != currentTarget)
+            if (visibleTargets [0] != currentTarget)
             {
                 targetChanged = true;
             }
 
-            currentTarget = visibleTargets[0];
+            currentTarget = visibleTargets [0];
 
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
             //Debug.Log ("Updating position");
 
-            if (targetChanged)
+            // Only show targeting cursor if there is an available target and it is targeted
+            if (targetChanged)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
             {
-                animator.SetTrigger(appearTrigger);
+                animator.SetTriggerSafe (appearTrigger, appearAnimation, 0);
                 Debug.Log ("Appear trigger");
             }
-        }
+        } 
         else
         {
             // Hide the cursor
             //animator.SetTrigger(disappearTrigger);
 
             Unlock ();
+        }
+
+        if (gamecam.CamState == ThirdPersonCamera.CamStates.Target && currentTarget != null)
+        {
+            animator.SetTriggerSafe (lockingAnimation, lockedTrigger, 0);
         }
 	}
 
@@ -178,26 +197,26 @@ public class TargetingSystem : MonoBehaviour
 
     #region Methods (public)
 
-    public void Lock()
+    /*public void Lock()
     {        
         if (HasTarget)
         {
             locked = true;
-            animator.SetTrigger(lockedTrigger);
+            //animator.SetTrigger(lockedTrigger);
         }
-    }
+    }*/
 
     public void Unlock()
     {  
-        if (HasTarget)
+        if (HasTarget && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
         {
             // If we don't have a target anymore, we should unlock
             locked = false;
             currentTarget = null;
 
             //animator.ResetTrigger (lockedTrigger);
-            animator.SetTrigger(disappearTrigger);
-            animator.ResetTrigger (disappearTrigger);
+            animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);
+            //animator.ResetTrigger (disappearTrigger);
             Debug.Log ("Disappear trigger");
         }
     }

@@ -318,7 +318,7 @@ public class ThirdPersonCamera : MonoBehaviour
                 savedRigToGoal = Vector3.zero;
 
                 // If there is a target displayed on screen when entering this mode, we need to lock on it
-                targetingSystem.Lock();
+                //targetingSystem.Lock();
 			}
 			camState = CamStates.Target;
 
