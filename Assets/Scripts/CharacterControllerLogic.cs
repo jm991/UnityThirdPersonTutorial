@@ -208,7 +208,7 @@ public class CharacterControllerLogic : MonoBehaviour
 		// Rotate character model if stick is tilted right or left, but only if character is moving in that direction
 		if (IsInLocomotion() && gamecam.CamState == ThirdPersonCamera.CamStates.Behind  && !IsInPivot() && ((direction >= 0 && leftX >= 0) || (direction < 0 && leftX < 0)))
 		{
-			Debug.Log ("behind Rotating");
+//			Debug.Log ("behind Rotating");
 			Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
 			Quaternion deltaRotation = Quaternion.Euler(rotationAmount * Time.deltaTime);
         	this.transform.rotation = (this.transform.rotation * deltaRotation);

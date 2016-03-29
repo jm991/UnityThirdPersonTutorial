@@ -52,19 +52,27 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField]
     private string lockedTrigger = "Locked";
     [SerializeField]
-    private string lockingAnimation = "Locking";
-    [SerializeField]
     private string unlockedTrigger = "Unlocked";
     [SerializeField]
     private string appearTrigger = "Appear";
     [SerializeField]
     private string disappearTrigger = "Disappear";
     [SerializeField]
+    private string lockingAnimation = "Locking";
+    [SerializeField]
     private string appearAnimation = "Appear";
     [SerializeField]
     private string disappearAnimation = "Disappear";
     [SerializeField]
     private float targetingCamAngle = 30.0f;
+
+    public static string[] triggers = new string[] 
+    {
+        "Locked",
+        "Unlocked",
+        "Appear",
+        "Disappear"
+    };
 
 	#endregion
 
@@ -212,7 +220,7 @@ public class TargetingSystem : MonoBehaviour
         {
             // If we don't have a target anymore, we should unlock
             locked = false;
-            currentTarget = null;
+            //currentTarget = null;
 
             //animator.ResetTrigger (lockedTrigger);
             animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);

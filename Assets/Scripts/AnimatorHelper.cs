@@ -14,11 +14,19 @@ public static class AnimatorHelper
     public static void SetTriggerSafe(this Animator _animator, string animationName, string triggerName, int layer)
     {
         //if (_animator.GetCurrentAnimatorStateInfo(layer).IsName(animationName))
-        if (!_animator.GetCurrentAnimatorStateInfo(layer).IsName(animationName))
+        //if (!_animator.GetCurrentAnimatorStateInfo(layer).IsName(animationName))
         {
             _animator.SetTrigger(triggerName);       
             //_animator.Play (animationName);
             Debug.Log ("Trigger succeeded");
+
+            foreach (string trigger in TargetingSystem.triggers)
+            {
+                if (!trigger.Equals(triggerName))
+                {
+                    _animator.ResetTrigger(trigger);
+                }
+            }
         }
     }
 }
