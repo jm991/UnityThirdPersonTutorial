@@ -185,7 +185,7 @@ public class TargetingSystem : MonoBehaviour
     {
         if (gamecam.CamState != ThirdPersonCamera.CamStates.Target)
         {
-            // Release 
+            // Release any targets
             Unlock ();
         }
     }
