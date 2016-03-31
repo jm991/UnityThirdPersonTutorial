@@ -357,27 +357,6 @@ public class ThirdPersonCamera : MonoBehaviour
 			}
 		}
 		
-        // If there's a target, the camera points between the two characters
-        if (targetingSystem.HasTarget)
-        {
-            Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
-            Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
-            Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
-            Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
-
-            // characterOffset = halfwayPoint;
-
-            // Find 30 degree left and right offset from targetToPlayer
-
-            Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-            Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-            Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
-            Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
-
-            float rightangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), right);
-            float leftangle = Vector3.Angle ((targetingSystem.CurrentTarget.transform.position - this.transform.forward), left);
-            // Debug.Log ("left: " + leftangle + " right: " + rightangle);
-        }
 
 		// Execute camera state
 		switch (camState)
