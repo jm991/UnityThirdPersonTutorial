@@ -174,13 +174,6 @@ public class TargetingSystem : MonoBehaviour
                 Debug.Log ("Appear trigger");
             }
         } 
-        else
-        {
-            // Hide the cursor
-            //animator.SetTrigger(disappearTrigger);
-
-            Unlock ();
-        }
 
         if (gamecam.CamState == ThirdPersonCamera.CamStates.Target && currentTarget != null)
         {
@@ -193,13 +186,13 @@ public class TargetingSystem : MonoBehaviour
 
 	#region Methods (private)
 
-    private void UpdateLock()
+    /*private void UpdateLock()
     {
         if (locked && currentTarget)
         {
             // Make sure in sight still
         }
-    }
+    }*/
 
 	#endregion
 
@@ -217,7 +210,7 @@ public class TargetingSystem : MonoBehaviour
 
     public void Unlock()
     {  
-        if (HasTarget && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
+        if (HasTarget)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
         {
             // If we don't have a target anymore, we should unlock
             locked = false;

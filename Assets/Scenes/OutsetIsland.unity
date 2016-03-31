@@ -1012,10 +1012,10 @@ MonoBehaviour:
   animator: {fileID: 0}
   locked: 0
   lockedTrigger: Locked
-  lockingAnimation: Locking
   unlockedTrigger: Unlocked
   appearTrigger: Locked
   disappearTrigger: Disappear
+  lockingAnimation: Locking
   appearAnimation: Appear
   disappearAnimation: Disappear
   targetingCamAngle: 30
@@ -1513,6 +1513,10 @@ Prefab:
       propertyPath: gamecam
       value: 
       objectReference: {fileID: 1690363843}
+    - target: {fileID: 11400000, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
   m_IsPrefabParent: 0
