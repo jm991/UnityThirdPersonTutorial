@@ -326,10 +326,7 @@ public class ThirdPersonCamera : MonoBehaviour
 			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 1.0f);
 		}
 		else
-		{			
-            // Release any targets
-            targetingSystem.Unlock();
-
+		{	
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
 			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
 			

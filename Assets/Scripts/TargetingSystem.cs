@@ -181,36 +181,23 @@ public class TargetingSystem : MonoBehaviour
         }
 	}
 
+    void LateUpdate()
+    {
+        if (gamecam.CamState != ThirdPersonCamera.CamStates.Target)
+        {
+            // Release 
+            Unlock ();
+        }
+    }
+
     #endregion
 
 
 	#region Methods (private)
 
-    /*private void UpdateLock()
-    {
-        if (locked && currentTarget)
-        {
-            // Make sure in sight still
-        }
-    }*/
-
-	#endregion
-
-
-    #region Methods (public)
-
-    /*public void Lock()
-    {        
-        if (HasTarget)
-        {
-            locked = true;
-            //animator.SetTrigger(lockedTrigger);
-        }
-    }*/
-
-    public void Unlock()
+    private void Unlock()
     {  
-        if (HasTarget)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
+        if (HasTarget)
         {
             // If we don't have a target anymore, we should unlock
             locked = false;
@@ -223,6 +210,12 @@ public class TargetingSystem : MonoBehaviour
             Debug.Log ("Disappear trigger");
         }
     }
+
+
+    #endregion
+
+
+    #region Methods (public)
 
 
     #endregion
