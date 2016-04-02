@@ -18,7 +18,7 @@ public static class AnimatorHelper
         {
             _animator.SetTrigger(triggerName);       
             //_animator.Play (animationName);
-            Debug.Log ("Trigger succeeded");
+            //Debug.Log ("Trigger succeeded");
 
             foreach (string trigger in TargetingSystem.triggers)
             {

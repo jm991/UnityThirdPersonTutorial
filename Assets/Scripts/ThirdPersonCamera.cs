@@ -354,6 +354,20 @@ public class ThirdPersonCamera : MonoBehaviour
 			}
 		}
 		
+        // TODO: move into CamStates.Target
+        Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
+        Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
+        Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
+        Vector3 targetToRig = (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized;
+        Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
+
+        // Find 30 degree left and right offset from targetToPlayer
+        Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+        Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+        Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
+        Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
+        Debug.DrawRay (this.transform.position, RigToGoalDirection * 2f, Color.green);  
+        Debug.DrawRay (this.transform.position, targetToRig, Color.green);
 
 		// Execute camera state
 		switch (camState)
@@ -393,27 +407,22 @@ public class ThirdPersonCamera : MonoBehaviour
                 // If there's a target, the camera points between the two characters
                 if (targetingSystem.HasTarget)
                 {
-                    Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
-                    Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
-                    Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
-                    Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
 
                     // characterOffset = halfwayPoint;
 
-                    // Find 30 degree left and right offset from targetToPlayer
 
-                    Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-                    Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
-                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
-                    Debug.DrawRay (this.transform.position, RigToGoalDirection * 2f, Color.green);
                     // ORIGINAL
                     //characterOffset = halfwayPoint + (distanceUp * followXform.up);
                     //Debug.Log ("dot: " + Vector3.Dot (followXform.forward, (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized));
                     float rightDot = Vector3.Dot ((targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized, right);
                     float leftDot = Vector3.Dot ((targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized, left);
+
+                    float rightAngle = Vector3.Angle (targetToRig, right);
+                    float leftAngle = Vector3.Angle (targetToRig, left);
+                    Debug.Log ("Right: " + rightAngle + " left: " + leftAngle, this);
+
                     // See which is smaller
-                    if (leftDot < rightDot)
+                    if (leftAngle < rightAngle)
                     {
                         savedRigToGoal = left;
                         // Debug.Log("chose left, left dot: " + leftDot + " right dot: " + rightDot);
@@ -421,7 +430,7 @@ public class ThirdPersonCamera : MonoBehaviour
                     else
                     {
                         // Debug.Log("chose right, left dot: " + leftDot + " right dot: " + rightDot);
-                        savedRigToGoal = left;
+                        savedRigToGoal = right;
                     }
 
                     //savedRigToGoal = -1f * left;

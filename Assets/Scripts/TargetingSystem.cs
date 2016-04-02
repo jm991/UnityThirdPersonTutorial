@@ -171,7 +171,7 @@ public class TargetingSystem : MonoBehaviour
             if (targetChanged)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
             {
                 animator.SetTriggerSafe (appearTrigger, appearAnimation, 0);
-                Debug.Log ("Appear trigger");
+                //Debug.Log ("Appear trigger");
             }
         } 
 
@@ -207,7 +207,7 @@ public class TargetingSystem : MonoBehaviour
             //animator.ResetTrigger (lockedTrigger);
             animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);
             //animator.ResetTrigger (disappearTrigger);
-            Debug.Log ("Disappear trigger");
+            //Debug.Log ("Disappear trigger");
         }
     }
 
