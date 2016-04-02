@@ -357,21 +357,6 @@ public class ThirdPersonCamera : MonoBehaviour
 			}
 		}
 		
-        // TODO: move into CamStates.Target
-        Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
-        Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
-        Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
-        Vector3 targetToRig = (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized;
-        Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
-
-        // Find 30 degree left and right offset from targetToPlayer
-        Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-        Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
-        Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
-        Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
-        Debug.DrawRay (this.transform.position, RigToGoalDirection * 2f, Color.green);  
-        Debug.DrawRay (this.transform.position, targetToRig, Color.green);
-
 		// Execute camera state
 		switch (camState)
 		{
@@ -410,6 +395,20 @@ public class ThirdPersonCamera : MonoBehaviour
                 // If there's a target, the camera points between the two characters
                 if (targetingSystem.HasTarget)
                 {
+                    Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
+                    Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
+                    Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
+                    Vector3 targetToRig = (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized;
+                    Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
+
+                    // Find 30 degree left and right offset from targetToPlayer
+                    Vector3 right = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 + targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+                    Vector3 left = -1f * (Quaternion.LookRotation (targetToPlayer) * Quaternion.Euler (0, 180 - targetingSystem.TargetingCamAngle, 0) * new Vector3 (0, 0, 1));
+                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, right * 2f, Color.black);
+                    Debug.DrawRay (targetingSystem.CurrentTarget.transform.position + Vector3.up, left * 2f, Color.magenta);
+                    Debug.DrawRay (this.transform.position, RigToGoalDirection * 2f, Color.green);  
+                    Debug.DrawRay (this.transform.position, targetToRig, Color.green);
+
 
                     // characterOffset = halfwayPoint;
 
@@ -639,11 +638,21 @@ public class ThirdPersonCamera : MonoBehaviour
 
 	#region Utilities (static)
 
-	public static bool IsVisibleFrom(Renderer renderer, Camera camera)
+    public static bool IsVisibleFrom(GameObject check, Camera camera)
 	{
+        //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
+        Bounds bounds = new Bounds(check.transform.position, Vector3.zero);
+
+        // Find all children of the object that are Renderers/SkinnedMeshRenderers and add them to the bounds
+        foreach (Renderer curRenderer in check.GetComponentsInChildren<Renderer>()) 
+        {
+            bounds.Encapsulate(curRenderer.bounds);  
+        }
+
 		// Can also consider using renderer.isVisible based on performance and shadow settings
 		Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
-		return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
+        bool test = GeometryUtility.TestPlanesAABB(planes, bounds);
+        return test;
 	}
 
 	public static bool IsOccluded(Collider target, Camera camera)

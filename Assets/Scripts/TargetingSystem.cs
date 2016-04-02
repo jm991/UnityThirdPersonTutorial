@@ -141,9 +141,9 @@ public class TargetingSystem : MonoBehaviour
 		{
             Debug.DrawLine(player.transform.position, target.transform.position, Color.blue);
 
-			if (/*ThirdPersonCamera.IsVisibleFrom(target.GetComponent<Renderer>(), Camera.main)
-			    && !ThirdPersonCamera.IsOccluded(target.GetComponent<Collider>(), Camera.main)
-				&& */Vector3.Dot(player.transform.forward, (target.transform.position - player.transform.position).normalized) > 0f) 
+            if (ThirdPersonCamera.IsVisibleFrom(target.gameObject, Camera.main)
+			    /*&& !ThirdPersonCamera.IsOccluded(target.GetComponent<Collider>(), Camera.main)*/
+				&& Vector3.Dot(player.transform.forward, (target.transform.position - player.transform.position).normalized) > 0f) 
 			{
 				visibleTargets.Add (target);
 			}
