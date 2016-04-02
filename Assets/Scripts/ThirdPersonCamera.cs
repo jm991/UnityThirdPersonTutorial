@@ -97,7 +97,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	[SerializeField]
 	private float compensationOffset = 0.2f;
 	[SerializeField]
-	private CamStates startingState = CamStates.Free;
+    private CamStates startingState = CamStates.Behind;
     [SerializeField]
     private TargetingSystem targetingSystem;
 	
@@ -239,6 +239,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		distanceUpFree = distanceUp;
 		distanceAwayFree = distanceAway;
 		savedRigToGoal = RigToGoalDirection;
+        savedRigToGoalDirection = RigToGoalDirection;
 
 		// Initialize the Animator to the base layer 
 		// If you have more than one layer, you'll need to do this for each layer
@@ -345,13 +346,14 @@ public class ThirdPersonCamera : MonoBehaviour
 			{
 				camState = CamStates.Free;
 				savedRigToGoal = Vector3.zero;
+                savedRigToGoalDirection = RigToGoalDirection;
 			}
 
 			// * Behind the back *
 			if ((camState == CamStates.FirstPerson && bButtonPressed) || 
 				(camState == CamStates.Target && leftTrigger <= TARGETING_THRESHOLD))
 			{
-				camState = CamStates.Behind;	
+				camState = CamStates.Behind;
 			}
 		}
 		
@@ -490,47 +492,52 @@ public class ThirdPersonCamera : MonoBehaviour
 				// Choose lookAt target based on distance
 				lookAt = (Vector3.Lerp(this.transform.position + this.transform.forward, lookAt, Vector3.Distance(this.transform.position, firstPersonCamPos.XForm.position)));
 				break;
-			case CamStates.Free:
-				lookWeight = Mathf.Lerp(lookWeight, 0.0f, Time.deltaTime * firstPersonLookSpeed);
+            case CamStates.Free:
+                lookWeight = Mathf.Lerp (lookWeight, 0.0f, Time.deltaTime * firstPersonLookSpeed);
 
-				Vector3 rigToGoal = characterOffset - cameraXform.position;
-				rigToGoal.y = 0f;
-				Debug.DrawRay(cameraXform.transform.position, rigToGoal, Color.red);
+                Vector3 rigToGoal = characterOffset - cameraXform.position;
+                rigToGoal.y = 0f;
+                Debug.DrawRay (cameraXform.transform.position, rigToGoal, Color.red);
 				
 				// Panning in and out
 				// If statement works for positive values; don't tween if stick not increasing in either direction; also don't tween if user is rotating
 				// Checked against rightStickThreshold because very small values for rightY mess up the Lerp function
-				if (rightY < lastStickMin && rightY < -1f * rightStickThreshold && rightY <= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
-				{
-					// Zooming out
-					distanceUpFree = Mathf.Lerp(distanceUp, distanceUp * distanceUpMultiplier, Mathf.Abs(rightY));
-					distanceAwayFree = Mathf.Lerp(distanceAway, distanceAway * distanceAwayMultipler, Mathf.Abs(rightY));
-					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;
+                if (rightY < lastStickMin && rightY < -1f * rightStickThreshold && rightY <= rightStickPrevFrame.y && Mathf.Abs (rightX) < rightStickThreshold)
+                {
+                    // Zooming out
+                    distanceUpFree = Mathf.Lerp (distanceUp, distanceUp * distanceUpMultiplier, Mathf.Abs (rightY));
+                    distanceAwayFree = Mathf.Lerp (distanceAway, distanceAway * distanceAwayMultipler, Mathf.Abs (rightY));
+                    targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;
                     lastStickMin = rightY;
                     savedRigToGoalDirection = RigToGoalDirection;
-                }
-				else if (rightY > rightStickThreshold && rightY >= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
-				{
-                	// Zooming in
-                	// Subtract height of camera from height of player to find Y distance
-					distanceUpFree = Mathf.Lerp(Mathf.Abs(transform.position.y - characterOffset.y), camMinDistFromChar.y, rightY);
-					// Use magnitude function to find X distance	
-					distanceAwayFree = Mathf.Lerp(rigToGoal.magnitude, camMinDistFromChar.x, rightY);		
-					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;		
-					lastStickMin = float.PositiveInfinity;
+                } else if (rightY > rightStickThreshold && rightY >= rightStickPrevFrame.y && Mathf.Abs (rightX) < rightStickThreshold)
+                {
+                    // Zooming in
+                    // Subtract height of camera from height of player to find Y distance
+                    distanceUpFree = Mathf.Lerp (Mathf.Abs (transform.position.y - characterOffset.y), camMinDistFromChar.y, rightY);
+                    // Use magnitude function to find X distance	
+                    distanceAwayFree = Mathf.Lerp (rigToGoal.magnitude, camMinDistFromChar.x, rightY);		
+                    targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;		
+                    lastStickMin = float.PositiveInfinity;
                     savedRigToGoalDirection = RigToGoalDirection;
-				}				
+                }				
+
+
+                // Rotating around character
+                cameraXform.RotateAround (characterOffset, followXform.up, freeRotationDegreePerSecond * (Mathf.Abs (rightX) > rightStickThreshold ? rightX : 0f));
                                 
 				// Store direction only if right stick inactive
-				if (rightX != 0 || rightY != 0)
-				{
+                if ((rightX != 0 || rightY != 0) && Mathf.Abs (rightX) <= rightStickThreshold)
+                {
+                    // Fixes the issue where the camera keeps rotating even when stick is fully left or right
                     savedRigToGoal = savedRigToGoalDirection;//RigToGoalDirection;
                     Debug.DrawRay (this.transform.position, savedRigToGoal, Color.red);
-				}
-				
-			
-				// Rotating around character
-				cameraXform.RotateAround(characterOffset, followXform.up, freeRotationDegreePerSecond * (Mathf.Abs(rightX) > rightStickThreshold ? rightX : 0f));
+                } 
+                else
+                {
+                    savedRigToGoal = RigToGoalDirection;
+                    savedRigToGoalDirection = RigToGoalDirection;
+                }
 								
 				// Still need to track camera behind player even if they aren't using the right stick; achieve this by saving distanceAwayFree every frame
 				if (targetPosition == Vector3.zero)
