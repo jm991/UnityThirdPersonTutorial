@@ -121,6 +121,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float lookWeight;
 	private const float TARGETING_THRESHOLD = 0.01f;
 	private Vector3 savedRigToGoal;
+    private Vector3 savedRigToGoalDirection;
 	private float distanceAwayFree;
 	private float distanceUpFree;	
 	private Vector2 rightStickPrevFrame = Vector2.zero;
@@ -505,7 +506,8 @@ public class ThirdPersonCamera : MonoBehaviour
 					distanceUpFree = Mathf.Lerp(distanceUp, distanceUp * distanceUpMultiplier, Mathf.Abs(rightY));
 					distanceAwayFree = Mathf.Lerp(distanceAway, distanceAway * distanceAwayMultipler, Mathf.Abs(rightY));
 					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;
-					lastStickMin = rightY;
+                    lastStickMin = rightY;
+                    savedRigToGoalDirection = RigToGoalDirection;
                 }
 				else if (rightY > rightStickThreshold && rightY >= rightStickPrevFrame.y && Mathf.Abs(rightX) < rightStickThreshold)
 				{
@@ -516,12 +518,14 @@ public class ThirdPersonCamera : MonoBehaviour
 					distanceAwayFree = Mathf.Lerp(rigToGoal.magnitude, camMinDistFromChar.x, rightY);		
 					targetPosition = characterOffset + followXform.up * distanceUpFree - RigToGoalDirection * distanceAwayFree;		
 					lastStickMin = float.PositiveInfinity;
+                    savedRigToGoalDirection = RigToGoalDirection;
 				}				
                                 
 				// Store direction only if right stick inactive
 				if (rightX != 0 || rightY != 0)
 				{
-					savedRigToGoal = RigToGoalDirection;
+                    savedRigToGoal = savedRigToGoalDirection;//RigToGoalDirection;
+                    Debug.DrawRay (this.transform.position, savedRigToGoal, Color.red);
 				}
 				
 			
