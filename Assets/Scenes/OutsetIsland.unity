@@ -1254,11 +1254,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
       propertyPath: targetSmoothDampTime
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
       propertyPath: wallhitMask.m_Bits
       value: 4294967039
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
+      propertyPath: fPSRotationDegreePerSecond
+      value: 0.012
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
+      propertyPath: freeRotationDegreePerSecond
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
+      propertyPath: targetingRotationDegreePerSecond
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
