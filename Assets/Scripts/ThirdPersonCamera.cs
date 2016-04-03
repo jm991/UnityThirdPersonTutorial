@@ -105,10 +105,14 @@ public class ThirdPersonCamera : MonoBehaviour
 	// Smoothing and damping
     private Vector3 velocityCamSmooth = Vector3.zero;	
 	[SerializeField]
-	private float camSmoothDampTime = 0.1f;
+    private float camSmoothDampTime = 0.1f;
+    [SerializeField]
+    private float targetSmoothDampTime = 1.0f;
     private Vector3 velocityLookDir = Vector3.zero;
 	[SerializeField]
 	private float lookDirDampTime = 0.1f;
+    [SerializeField]
+    private LayerMask wallhitMask;
 	
 	
 	// Private global only
@@ -376,6 +380,9 @@ public class ThirdPersonCamera : MonoBehaviour
 				
 					// Damping makes it so we don't update targetPosition while pivoting; camera shouldn't rotate around player
 					curLookDir = Vector3.SmoothDamp(curLookDir, lookDir, ref velocityLookDir, lookDirDampTime);
+
+                    Debug.DrawRay (followXform.position, curLookDir, Color.red);
+                    Debug.DrawRay (followXform.position, lookDir, Color.blue);
 				}				
 				
 				targetPosition = characterOffset + followXform.up * distanceUp - Vector3.Normalize(curLookDir) * distanceAway;
@@ -423,17 +430,24 @@ public class ThirdPersonCamera : MonoBehaviour
                     float leftAngle = Vector3.Angle (targetToRig, left);
                     Debug.Log ("Right: " + rightAngle + " left: " + leftAngle, this);
 
+                    Vector3 smallerAngle;
+
                     // See which is smaller
                     if (leftAngle < rightAngle)
                     {
-                        savedRigToGoal = left;
+                        smallerAngle = left;
                         // Debug.Log("chose left, left dot: " + leftDot + " right dot: " + rightDot);
                     } 
                     else
                     {
                         // Debug.Log("chose right, left dot: " + leftDot + " right dot: " + rightDot);
-                        savedRigToGoal = right;
+                        smallerAngle = right;
                     }
+
+                    savedRigToGoal = Vector3.Lerp(savedRigToGoal, smallerAngle, targetSmoothDampTime * Time.deltaTime);
+
+                    // Set curLookDir so that there is no jerkiness when returning to Behind CamState
+                    curLookDir = savedRigToGoal;
 
                     //savedRigToGoal = -1f * left;
 
@@ -571,7 +585,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	{
 		// Compensate for walls between camera
 		RaycastHit wallHit = new RaycastHit();		
-		if (Physics.Linecast(fromObject, toTarget, out wallHit)) 
+        if (Physics.Linecast(fromObject, toTarget, out wallHit, wallhitMask)) 
 		{
 			Debug.DrawRay(wallHit.point, wallHit.normal, Color.red);
 			toTarget = wallHit.point;
@@ -588,8 +602,8 @@ public class ThirdPersonCamera : MonoBehaviour
 			RaycastHit cCWHit = new RaycastHit();
 			
 			// Cast lines in both directions around near clipping plane bounds
-			while (Physics.Linecast(viewFrustum[i], viewFrustum[(i + 1) % (viewFrustum.Length / 2)], out cWHit) ||
-			       Physics.Linecast(viewFrustum[(i + 1) % (viewFrustum.Length / 2)], viewFrustum[i], out cCWHit))
+            while (Physics.Linecast(viewFrustum[i], viewFrustum[(i + 1) % (viewFrustum.Length / 2)], out cWHit, wallhitMask) ||
+                Physics.Linecast(viewFrustum[(i + 1) % (viewFrustum.Length / 2)], viewFrustum[i], out cCWHit, wallhitMask))
 			{
 				Vector3 normal = wallHit.normal;
 				if (wallHit.normal == Vector3.zero)
@@ -640,7 +654,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
     public static bool IsVisibleFrom(GameObject check, Camera camera)
 	{
-        //Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
+        // Based on solution found here: 11949463 stackoverflow
+        // Now you have a center, calculate the bounds by creating a zero sized 'Bounds', 
         Bounds bounds = new Bounds(check.transform.position, Vector3.zero);
 
         // Find all children of the object that are Renderers/SkinnedMeshRenderers and add them to the bounds

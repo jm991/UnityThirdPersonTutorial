@@ -226,7 +226,7 @@ public class CharacterControllerLogic : MonoBehaviour
             //float falloff = Vector3.Dot (gamecam.transform.forward, lookPos);
 
 
-            //this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation/* Quaternion.Euler(rotation.eulerAngles * falloff)*/, Time.deltaTime * rotationDampTime);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation/* Quaternion.Euler(rotation.eulerAngles * falloff)*/, Time.deltaTime * rotationDampTime);
 
             //Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, -rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
             //Quaternion deltaRotation = Quaternion.Euler(rotationAmount * Time.deltaTime);
