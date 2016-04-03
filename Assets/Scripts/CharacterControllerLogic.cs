@@ -225,7 +225,7 @@ public class CharacterControllerLogic : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(lookPos);
             //float falloff = Vector3.Dot (gamecam.transform.forward, lookPos);
 
-
+            // Makes character face target
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation/* Quaternion.Euler(rotation.eulerAngles * falloff)*/, Time.deltaTime * rotationDampTime);
 
             //Vector3 rotationAmount = Vector3.Lerp(Vector3.zero, new Vector3(0f, -rotationDegreePerSecond * (leftX < 0f ? -1f : 1f), 0f), Mathf.Abs(leftX));
@@ -303,15 +303,19 @@ public class CharacterControllerLogic : MonoBehaviour
         Vector3 CameraDirection = camera.forward;
         CameraDirection.y = 0.0f; // kill Y
         Quaternion referentialShift = Quaternion.FromToRotation(Vector3.forward, Vector3.Normalize(CameraDirection));
+        Quaternion charReferentialShift = Quaternion.FromToRotation (Vector3.forward, Vector3.Normalize (rootDirection));
 
         // Convert joystick input in Worldspace coordinates
         Vector3 moveDirection = referentialShift * stickDirection;
+        Vector3 targetMoveDirection = charReferentialShift * stickDirection;
 		Vector3 axisSign = Vector3.Cross(moveDirection, rootDirection);
 		
-		Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), moveDirection, Color.green);
-		Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), rootDirection, Color.magenta);
-		Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2f, root.position.z), stickDirection, Color.blue);
-		Debug.DrawRay(new Vector3(root.position.x, root.position.y + 2.5f, root.position.z), axisSign, Color.red);
+        Vector3 debugPoint = new Vector3 (root.position.x, root.position.y + 2f, root.position.z);
+		Debug.DrawRay(debugPoint, moveDirection, Color.green);
+		Debug.DrawRay(debugPoint, rootDirection, Color.magenta);
+        Debug.DrawRay (debugPoint, targetMoveDirection, Color.cyan);
+		Debug.DrawRay(debugPoint, stickDirection, Color.blue);
+        Debug.DrawRay(debugPoint, axisSign, Color.red);
 		
 		float angleRootToMove = Vector3.Angle(rootDirection, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
 		if (!isPivoting)

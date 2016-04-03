@@ -444,7 +444,7 @@ public class ThirdPersonCamera : MonoBehaviour
                         smallerAngle = right;
                     }
 
-                    savedRigToGoal = Vector3.Lerp(savedRigToGoal, smallerAngle, targetSmoothDampTime * Time.deltaTime);
+                    savedRigToGoal = smallerAngle;//Vector3.Lerp(savedRigToGoal, smallerAngle, targetSmoothDampTime * Time.deltaTime);
 
                     // Set curLookDir so that there is no jerkiness when returning to Behind CamState
                     curLookDir = savedRigToGoal;
