@@ -1250,7 +1250,7 @@ Prefab:
       objectReference: {fileID: 1237121170}
     - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
       propertyPath: distanceUp
-      value: 1.3
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
       propertyPath: targetSmoothDampTime
@@ -1278,7 +1278,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
       propertyPath: distanceAway
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e6e40eda5a3f31244baa1160274612a8, type: 2}
