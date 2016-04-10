@@ -92,6 +92,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private float rightStickThreshold = 0.1f;
 	[SerializeField]
 	private const float freeRotationDegreePerSecond = -5f;
+    [SerializeField]
+    private float targetingRotationDegreePerSecond = 0.01f;
 	[SerializeField]
 	private float mouseWheelSensitivity = 3.0f;
 	[SerializeField]
@@ -134,6 +136,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3[] viewFrustum;
 	private Vector3 characterOffset;
 	private Vector3 targetPosition;	
+    private Vector3 lookAt;
 	
 	#endregion
 	
@@ -192,7 +195,27 @@ public class ThirdPersonCamera : MonoBehaviour
 
 			return rigToGoalDirection;
 		}
-	}
+    }
+
+    public Vector3 RigToTargetDirection
+    {
+        get
+        {
+            if (targetingSystem.CurrentTarget != null)
+            {
+                // Move height and distance from character in separate parentRig transform since RotateAround has control of both position and rotation
+                Vector3 rigToTargetDirection = Vector3.Normalize(targetingSystem.CurrentTarget.transform.position - this.transform.position);
+                // Can't calculate distanceAway from a vector with Y axis rotation in it; zero it out
+                rigToTargetDirection.y = 0f;
+
+                return rigToTargetDirection;
+            }
+            else
+            {
+                return RigToGoalDirection;
+            }
+        }
+    }
 	
 	#endregion
 	
@@ -311,7 +334,7 @@ public class ThirdPersonCamera : MonoBehaviour
 		}
 		
 		characterOffset = followXform.position + (distanceUp * followXform.up);
-		Vector3 lookAt = characterOffset;
+		
 		targetPosition = Vector3.zero;
 
 
@@ -334,7 +357,8 @@ public class ThirdPersonCamera : MonoBehaviour
 		else
 		{	
 			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
-			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
+            follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
+            lookAt = characterOffset;
 			
 			// * First Person *
 			if (rightY > firstPersonThreshold && camState != CamStates.Free && !follow.IsInLocomotion())
@@ -404,7 +428,8 @@ public class ThirdPersonCamera : MonoBehaviour
                 {
                     Debug.DrawLine (followXform.position, targetingSystem.CurrentTarget.transform.position, Color.cyan);
                     Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
-                    Vector3 halfwayPoint = followXform.position + (targetToPlayer * 0.5f);
+                    targetToPlayer.y += distanceUp;
+                    Vector3 halfwayPoint = characterOffset + (targetToPlayer * 0.5f);
                     Vector3 targetToRig = (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized;
                     Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
 
@@ -428,7 +453,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
                     float rightAngle = Vector3.Angle (targetToRig, right);
                     float leftAngle = Vector3.Angle (targetToRig, left);
-                    Debug.Log ("Right: " + rightAngle + " left: " + leftAngle, this);
+                    // Debug.Log ("Right: " + rightAngle + " left: " + leftAngle, this);
 
                     Vector3 smallerAngle;
 
@@ -451,8 +476,31 @@ public class ThirdPersonCamera : MonoBehaviour
 
                     //savedRigToGoal = -1f * left;
 
+                    // Flatten vectors so angle measurements are only in 2 movement dimensions
+                    smallerAngle.y = 0;
+                    Vector3 forwardTest = this.transform.forward;
+                    forwardTest.y = 0;
+                    float rotRemaining = Vector3.Angle (forwardTest, smallerAngle);
 
-                    targetPosition = characterOffset + followXform.up - savedRigToGoal * distanceAway;
+
+                    Vector3 axisSign = Vector3.Cross(smallerAngle, forwardTest);
+                    float angleRootToMove = Vector3.Angle(forwardTest, smallerAngle) * (axisSign.y >= 0 ? -1f : 1f);
+
+                    // The camera only rotates around the character if they are not moving when targeting
+                    if (Mathf.Abs(leftX) <= rightStickThreshold && Mathf.Abs(leftY) <= rightStickThreshold)
+                    {
+                        Debug.Log ("rotating, leftX: " + leftX + " leftY: " + leftY, this);
+                        cameraXform.RotateAround (targetingSystem.CurrentTarget.transform.position, targetingSystem.CurrentTarget.transform.up, targetingRotationDegreePerSecond * Time.deltaTime * angleRootToMove);
+                    }
+                    //Debug.Log ("angle to move remaining: " + angleRootToMove, this);
+                    Debug.DrawRay (this.transform.position, forwardTest, Color.blue);
+                    Debug.DrawRay (this.transform.position, smallerAngle, Color.red);
+
+                    targetPosition = characterOffset + followXform.up - RigToGoalDirection * distanceAway;
+                    // targetPosition = halfwayPoint + RigToGoalDirection * distanceAway;
+
+                    lookAt = targetingSystem.CurrentTarget.transform.position;
+                    lookAt.y += distanceUp;
                     //lookAt = right;
 
                     //targetPosition = characterOffset + followXform.up - (targetingSystem.CurrentTarget.transform.position - followXform.position) * distanceAway;

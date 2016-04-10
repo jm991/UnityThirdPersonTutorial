@@ -83,6 +83,9 @@ public class CharacterControllerLogic : MonoBehaviour
 	
 	#region Properties (public)
 
+    public float targetDirection;
+    public float targetSpeed;
+
 	public Animator Animator
 	{
 		get
@@ -176,11 +179,73 @@ public class CharacterControllerLogic : MonoBehaviour
 				gamecam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(gamecam.GetComponent<Camera>().fieldOfView, NORMAL_FOV, fovDampTime * Time.deltaTime);		
 			}
 
-			if (gamecam.CamState != ThirdPersonCamera.CamStates.Target) 
-			{
-				animator.SetFloat ("Direction", direction, directionDampTime, Time.deltaTime);
-			}
-			animator.SetFloat("Speed", speed, speedDampTime, Time.deltaTime);
+            if (gamecam.CamState != ThirdPersonCamera.CamStates.Target)
+            {
+                animator.SetFloat ("Direction", direction, directionDampTime, Time.deltaTime);
+            } 
+            else
+            {
+                Vector3 stickVec = new Vector3(leftX, 0, leftY);
+
+                // Convert joystick input in Worldspace coordinates
+                //Quaternion referentialShift = Quaternion.FromToRotation(Vector3.forward, Vector3.Normalize(this.transform.forward));
+                // Get camera rotation
+                Vector3 CameraDirection = gamecam.transform.forward;
+                CameraDirection.y = 0.0f; // kill Y
+                Quaternion referentialShift = Quaternion.FromToRotation(Vector3.forward, Vector3.Normalize(CameraDirection));
+                Vector3 moveDirection = referentialShift * stickVec;
+
+                // In targeting mode, speed is equal to the stick vector magnitude with a sign determined by whether the character and stick are facing the same direction
+                // It is then multiplied by the dot product of the two vectors to make it approach 0 when the vector being compared (stick vector) approaches the x axis)
+
+                float speedSign = (Vector3.Dot(this.transform.forward, stickVec) >= 0f ? 1f : -1f);
+                float testSpeed = stickVec.sqrMagnitude * speedSign;// * Vector3.Dot(this.transform.forward, stickVec);
+
+                //speed = testSpeed;
+
+                //Debug.Log ("Speed sign: " + speedSign + " speed val: " + testSpeed);
+
+                float testAngle = Vector3.Angle (this.transform.forward, stickVec);
+
+                Vector3 speedAxisSign = Vector3.Cross(this.transform.forward, stickVec) * -1f;
+                Vector3 directionAxisSign = Vector3.Cross(moveDirection, this.transform.forward) * -1f;
+                float testDirection = (testAngle / 100.0f) * (directionAxisSign.y >= 0f ? -1f : 1f);
+                Vector3 newSpeedAxisSign = new Vector3 (0f, Vector3.Dot (this.transform.forward, moveDirection), 0f);
+
+
+                Vector3 debugPoint = new Vector3 (this.transform.position.x, this.transform.position.y + 2f, this.transform.position.z);
+                Debug.DrawRay(debugPoint, directionAxisSign, Color.red);
+                //Debug.DrawRay(debugPoint, speedAxisSign, Color.black);
+                Debug.DrawRay(debugPoint, newSpeedAxisSign, Color.black);
+                Debug.DrawRay (debugPoint, new Vector3(testDirection, 0f, testSpeed), Color.green);
+                Debug.DrawRay(debugPoint, moveDirection, Color.blue);
+                Debug.DrawRay(debugPoint, this.transform.forward, Color.magenta);
+
+
+                Vector3 baseVec = this.transform.forward;
+                if (Vector3.Dot (baseVec, moveDirection) < 0f)
+                {
+                    // Reversing vector to measure angle to account for the X values that correspond to angles higher than 90 degrees (trying to map angles to 2D blend tree)
+                    baseVec *= -1f;
+                }
+                testAngle = (Vector3.Angle (baseVec, moveDirection) / 100.0f);
+                float directionAxisSignVal = (directionAxisSign.y >= 0 ? 1f : -1f);
+                //Debug.Log ("Angle sign: " + directionAxisSign + " angle val: " + (testAngle / 100.0f) + " final val: " + testAngle * directionAxisSignVal);
+
+                //direction = testDirection;
+                //animator.SetFloat("TargetSpeed", testSpeed, speedDampTime, Time.deltaTime);
+
+                targetSpeed = (moveDirection.sqrMagnitude * (newSpeedAxisSign.y >= 0 ? 1f : -1f));
+                targetDirection = testAngle * directionAxisSignVal;
+                // THIS IS THE CORRECT VALUE FOR Y and X
+                animator.SetFloat ("TargetSpeed", targetSpeed, speedDampTime, Time.deltaTime);
+                animator.SetFloat ("TargetDirection", targetDirection, directionDampTime, Time.deltaTime);
+
+                //animator.SetFloat ("TargetDirection", testDirection, directionDampTime, Time.deltaTime);
+                //animator.SetFloat("TargetDirection", (Vector3.Angle(this.transform.forward, moveDirection) / 100.0f) * (directionAxisSign.y >= 0 ? 1f : -1f), directionDampTime, Time.deltaTime);
+            }
+
+            animator.SetFloat("Speed", speed, speedDampTime, Time.deltaTime);
 			animator.SetFloat("XStick", leftX, speedDampTime, Time.deltaTime);
 			animator.SetFloat("YStick", leftY, directionDampTime, Time.deltaTime);
 			animator.SetFloat("StickAngle", Mathf.Atan2(leftX, leftY) * Mathf.Rad2Deg);
@@ -310,12 +375,12 @@ public class CharacterControllerLogic : MonoBehaviour
         Vector3 targetMoveDirection = charReferentialShift * stickDirection;
 		Vector3 axisSign = Vector3.Cross(moveDirection, rootDirection);
 		
-        Vector3 debugPoint = new Vector3 (root.position.x, root.position.y + 2f, root.position.z);
-		Debug.DrawRay(debugPoint, moveDirection, Color.green);
-		Debug.DrawRay(debugPoint, rootDirection, Color.magenta);
-        Debug.DrawRay (debugPoint, targetMoveDirection, Color.cyan);
-		Debug.DrawRay(debugPoint, stickDirection, Color.blue);
-        Debug.DrawRay(debugPoint, axisSign, Color.red);
+        //Vector3 debugPoint = new Vector3 (root.position.x, root.position.y + 2f, root.position.z);
+		//Debug.DrawRay(debugPoint, moveDirection, Color.green);
+		//Debug.DrawRay(debugPoint, rootDirection, Color.magenta);
+        //Debug.DrawRay (debugPoint, targetMoveDirection, Color.cyan);
+		//Debug.DrawRay(debugPoint, stickDirection, Color.blue);
+        //Debug.DrawRay(debugPoint, axisSign, Color.red);
 		
 		float angleRootToMove = Vector3.Angle(rootDirection, moveDirection) * (axisSign.y >= 0 ? -1f : 1f);
 		if (!isPivoting)

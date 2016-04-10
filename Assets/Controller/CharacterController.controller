@@ -13,55 +13,67 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Speed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: XStick
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: YStick
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Angle
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: StickAngle
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Jump
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: JumpCurve
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: CapsuleCurve
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: TargetSpeed
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: TargetDirection
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -616,7 +628,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Speed
+  m_BlendParameter: TargetSpeed
   m_BlendParameterY: Blend
   m_MinThreshold: 0.3
   m_MaxThreshold: 0.8
@@ -714,7 +726,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Speed
+  m_BlendParameter: TargetSpeed
   m_BlendParameterY: Blend
   m_MinThreshold: 0.3
   m_MaxThreshold: 0.8
@@ -752,11 +764,25 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: Speed
+  m_BlendParameter: TargetSpeed
   m_BlendParameterY: Blend
   m_MinThreshold: 0.3
   m_MaxThreshold: 0.8
   m_UseAutomaticThresholds: 0
+  m_NormalizedBlendValues: 0
+  m_BlendType: 0
+--- !u!206 &20666630
+BlendTree:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: BlendTree
+  m_Childs: []
+  m_BlendParameter: Direction
+  m_BlendParameterY: Direction
+  m_MinThreshold: 0
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!206 &20670460
@@ -849,6 +875,14 @@ BlendTree:
   m_Name: Backwards
   m_Childs:
   - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 532d1a3f13e990b458c587f77fa5447c, type: 3}
+    m_Threshold: -0.1
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 0.8219122
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Direction
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: b1a5e04ae51004842aba06704a6c2903, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
@@ -856,18 +890,10 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 532d1a3f13e990b458c587f77fa5447c, type: 3}
-    m_Threshold: 0.2
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: Direction
-    m_Mirror: 0
-  m_BlendParameter: Speed
+  m_BlendParameter: TargetSpeed
   m_BlendParameterY: Blend
-  m_MinThreshold: 0
-  m_MaxThreshold: 0.2
+  m_MinThreshold: -0.1
+  m_MaxThreshold: 0
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
@@ -881,7 +907,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20616408}
     m_Threshold: 0
-    m_Position: {x: -0.075, y: 0.075}
+    m_Position: {x: -0.45, y: 0.45}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -889,7 +915,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20646016}
     m_Threshold: 0.6
-    m_Position: {x: 0, y: 0.1}
+    m_Position: {x: 0, y: 0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -897,7 +923,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20649724}
     m_Threshold: 0.8
-    m_Position: {x: 0.075, y: 0.075}
+    m_Position: {x: 0.45, y: 0.45}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -905,7 +931,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 20688970}
     m_Threshold: 1
-    m_Position: {x: 0, y: -0.1}
+    m_Position: {x: 0, y: -0.5}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -913,7 +939,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400002, guid: 51a19b6bb68d01e408a8a4f156c99f8e, type: 3}
     m_Threshold: 1.2
-    m_Position: {x: -0.1, y: 0.003}
+    m_Position: {x: -0.9, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -921,7 +947,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 51a19b6bb68d01e408a8a4f156c99f8e, type: 3}
     m_Threshold: 1.4000001
-    m_Position: {x: 0.1, y: 0}
+    m_Position: {x: 0.9, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -929,7 +955,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400002, guid: 532d1a3f13e990b458c587f77fa5447c, type: 3}
     m_Threshold: 1.6000001
-    m_Position: {x: -0.075, y: -0.075}
+    m_Position: {x: -0.45, y: -0.45}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -937,7 +963,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400004, guid: 532d1a3f13e990b458c587f77fa5447c, type: 3}
     m_Threshold: 1.8000002
-    m_Position: {x: 0.075, y: -0.075}
+    m_Position: {x: 0.45, y: -0.45}
     m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
@@ -950,8 +976,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Direction
     m_Mirror: 0
-  m_BlendParameter: XStick
-  m_BlendParameterY: YStick
+  m_BlendParameter: TargetDirection
+  m_BlendParameterY: TargetSpeed
   m_MinThreshold: 0
   m_MaxThreshold: 2.0000002
   m_UseAutomaticThresholds: 0
