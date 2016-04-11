@@ -1994,8 +1994,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100140}
-  m_LocalRotation: {x: 0, y: 0.6404675, z: 0, w: 0.76798534}
-  m_LocalPosition: {x: 32.6, y: 4.5, z: 169.4}
+  m_LocalRotation: {x: 0, y: 0.14996512, z: 0, w: -0.9886913}
+  m_LocalPosition: {x: 35.38, y: 4.5, z: 169.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400136}
@@ -2053,7 +2053,7 @@ MonoBehaviour:
     enableFixedRotation: 1
     fixedRotation: {x: 90, y: 0, z: 0}
     targetTransform: {fileID: 400140}
-    size: 10
+    size: 6
     orthographic: 1
     sceneViewIndex: 0
 --- !u!114 &11400002
@@ -2079,6 +2079,8 @@ MonoBehaviour:
   capCollider: {fileID: 0}
   jumpDist: 3
   targetingSystem: {fileID: 0}
+  targetDirection: 0
+  targetSpeed: 0
 --- !u!114 &11420232
 MonoBehaviour:
   m_ObjectHideFlags: 1

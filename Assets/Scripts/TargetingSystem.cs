@@ -74,7 +74,8 @@ public class TargetingSystem : MonoBehaviour
         "Locked",
         "Unlocked",
         "Appear",
-        "Disappear"
+        "Disappear",
+        "DisappearForced",
     };
 
 	#endregion
@@ -176,7 +177,7 @@ public class TargetingSystem : MonoBehaviour
                 //Debug.Log ("Appear trigger");
             }
         } 
-        else if (currentTarget != null)
+        else // if (currentTarget != null)
         {
             
             //Unlock ();
