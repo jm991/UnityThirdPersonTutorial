@@ -1543,7 +1543,7 @@ Prefab:
       objectReference: {fileID: 1690363843}
     - target: {fileID: 11400000, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 79efd4c2b57a6d24f9555a5851c00ad1, type: 2}
       propertyPath: sceneViewFollowers.Array.data[0].size

@@ -59,6 +59,8 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField]
     private string disappearTrigger = "Disappear";
     [SerializeField]
+    private string disappearForcedTrigger = "DisappearForced";
+    [SerializeField]
     private string lockingAnimation = "Locking";
     [SerializeField]
     private string appearAnimation = "Appear";
@@ -174,16 +176,27 @@ public class TargetingSystem : MonoBehaviour
                 //Debug.Log ("Appear trigger");
             }
         } 
+        else if (currentTarget != null)
+        {
+            
+            //Unlock ();
+
+            animator.SetTriggerSafe(disappearAnimation, disappearForcedTrigger, 0);
+
+            // If no target is visible, we should reset the targeting   
+            currentTarget = null;
+        }
 
         if (gamecam.CamState == ThirdPersonCamera.CamStates.Target && currentTarget != null)
         {
             animator.SetTriggerSafe (lockingAnimation, lockedTrigger, 0);
+            locked = true;
         }
 	}
 
     void LateUpdate()
     {
-        if (gamecam.CamState != ThirdPersonCamera.CamStates.Target)
+        if (gamecam.CamState != ThirdPersonCamera.CamStates.Target && locked)
         {
             // Release any targets
             Unlock ();
