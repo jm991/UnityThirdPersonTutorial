@@ -55,7 +55,7 @@ public class CharacterControllerLogic : MonoBehaviour
     private float jumpDist = 1f;
     [SerializeField]
     private TargetingSystem targetingSystem;
-	
+    	
 	
 	// Private global only
 	private float leftX = 0f;

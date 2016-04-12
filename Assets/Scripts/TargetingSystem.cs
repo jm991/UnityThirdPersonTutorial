@@ -32,6 +32,8 @@ public class TargetingSystem : MonoBehaviour
 	[SerializeField]
     private CharacterControllerLogic player;
     [SerializeField]
+    private PlayerSight playerSight;
+    [SerializeField]
     private ThirdPersonCamera gamecam;
 	[SerializeField]
     private List<Targetable> targets;
@@ -107,15 +109,18 @@ public class TargetingSystem : MonoBehaviour
             gamecam = GameObject.FindObjectOfType<ThirdPersonCamera>();
         }
 
-        if (player == null)
-        {
-            GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
+        GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
 
-            if (playerObj != null)
-            {
-                player = playerObj.GetComponent<CharacterControllerLogic> ();
-            }
+        if (player == null && playerObj != null)
+        {
+            player = playerObj.GetComponent<CharacterControllerLogic> ();
         }
+
+        if (playerSight == null && playerObj != null)
+        {
+            playerSight = playerObj.GetComponent<PlayerSight> ();
+        }
+
 
 		// Find all targetable objects in the scene
 		if (targets == null) 
@@ -145,6 +150,7 @@ public class TargetingSystem : MonoBehaviour
             Debug.DrawLine(player.transform.position, target.transform.position, Color.blue);
 
             if (ThirdPersonCamera.IsVisibleFrom(target.gameObject, Camera.main)
+                && playerSight.TargetsInRange.Contains(target)
 			    /*&& !ThirdPersonCamera.IsOccluded(target.GetComponent<Collider>(), Camera.main)*/
 				&& Vector3.Dot(player.transform.forward, (target.transform.position - player.transform.position).normalized) > 0f) 
 			{
