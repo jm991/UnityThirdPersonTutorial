@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Based on SceneFadeInOut.cs from Unity samples:
 /// https://unity3d.com/learn/tutorials/projects/stealth/screen-fader
 /// </summary>
-[RequireComponent (typeof (GUITexture))]
+[RequireComponent (typeof (Image))]
 public class SceneFadeInOut : MonoBehaviour 
 {
     #region Variables (private)
@@ -14,7 +15,7 @@ public class SceneFadeInOut : MonoBehaviour
     [SerializeField]
     private float fadeSpeed = 1.5f;
     private bool sceneStarting = true;
-    private GUITexture guiTexture;
+    private Image screenFaderImage;
 
     #endregion
 
@@ -23,8 +24,8 @@ public class SceneFadeInOut : MonoBehaviour
 
     void Awake()
     {
-        guiTexture = GetComponent<GUITexture> ();
-        guiTexture.pixelInset = new Rect (0f, 0f, Screen.width, Screen.height);
+        screenFaderImage = GetComponent<Image> ();
+        screenFaderImage.color = Color.black;
     }
 
     void Update()
@@ -42,32 +43,32 @@ public class SceneFadeInOut : MonoBehaviour
 
     private void FadeToClear()
     {
-        guiTexture.color = Color.Lerp (guiTexture.color, Color.clear, fadeSpeed * Time.deltaTime);
+        screenFaderImage.color = Color.Lerp (screenFaderImage.color, Color.clear, fadeSpeed * Time.deltaTime);
     }
 
     private void FadeToBlack()
     {
-        guiTexture.color = Color.Lerp (guiTexture.color, Color.black, fadeSpeed * Time.deltaTime);
+        screenFaderImage.color = Color.Lerp (screenFaderImage.color, Color.black, fadeSpeed * Time.deltaTime);
     }
 
     private void StartScene()
     {
         FadeToClear ();
 
-        if (guiTexture.color.a <= 0.05f)
+        if (screenFaderImage.color.a <= 0.05f)
         {
-            guiTexture.color = Color.clear;
-            guiTexture.enabled = false;
+            screenFaderImage.color = Color.clear;
+            screenFaderImage.enabled = false;
             sceneStarting = false;
         }
     }
 
     private void EndScene()
     {
-        guiTexture.enabled = true;
+        screenFaderImage.enabled = true;
         FadeToBlack ();
 
-        if (guiTexture.color.a >= 0.95f)
+        if (screenFaderImage.color.a >= 0.95f)
         {
             SceneManager.LoadScene (1);
         }
