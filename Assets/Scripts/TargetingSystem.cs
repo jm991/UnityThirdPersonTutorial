@@ -188,7 +188,7 @@ public class TargetingSystem : MonoBehaviour
             }
 
             // TODO: place check here for if the targeting script is locked or needs to unlock (if you leave the range)
-            // if (!locked)
+            if (!locked)
             {
                 // Don't change the target if we're already locked on
                 currentTarget = visibleTargets [0];
