@@ -1188,7 +1188,7 @@ MonoBehaviour:
   shaderName: Sprites/SpriteBillboardSortTop
   colorPropName: _Color
   scalePropName: _Scale
-  animColor: {r: 1, g: 1, b: 0, a: 1}
+  animColor: {r: 1, g: 1, b: 0, a: 0}
   animScale: 1
   redColor: {r: 1, g: 0, b: 0, a: 1}
   yellowColor: {r: 1, g: 1, b: 0, a: 1}

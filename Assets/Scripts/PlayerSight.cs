@@ -26,7 +26,7 @@ public class PlayerSight : Sight
         col = GetComponent<SphereCollider> ();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         Targetable target = other.gameObject.GetComponent<Targetable> ();
 
