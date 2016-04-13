@@ -2043,9 +2043,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 178444}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d0c868c2b29564a9dae1d1627c0517, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e3f6e241dc14b345b4b37fc811b6c5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 0}
+  fieldOfViewAngle: 110
+  playerInSight: 0
+  personalLastSighting: {x: 0, y: 0, z: 0}
+  nav: {fileID: 0}
+  anim: {fileID: 0}
+  lastPlayerSighting: {fileID: 0}
+  player: {fileID: 0}
+  playerAnim: {fileID: 0}
 --- !u!114 &11420082
 MonoBehaviour:
   m_ObjectHideFlags: 1

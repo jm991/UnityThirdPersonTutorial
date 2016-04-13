@@ -63,6 +63,8 @@ public class TargetingSystem : MonoBehaviour
     [SerializeField]
     private string disappearForcedTrigger = "DisappearForced";
     [SerializeField]
+    private string appearForcedTrigger = "AppearForced";
+    [SerializeField]
     private string lockingAnimation = "Locking";
     [SerializeField]
     private string appearAnimation = "Appear";
@@ -78,6 +80,7 @@ public class TargetingSystem : MonoBehaviour
         "Appear",
         "Disappear",
         "DisappearForced",
+        "AppearForced",
     };
 
 	#endregion
@@ -168,27 +171,47 @@ public class TargetingSystem : MonoBehaviour
             if (visibleTargets [0] != currentTarget)
             {
                 targetChanged = true;
+                Debug.Log ("Target changed!", this);
+                //animator.ResetTrigger (appearTrigger);
+                //animator.Play (appearAnimation);
+                //animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
             }
 
-            currentTarget = visibleTargets [0];
+            // TODO: place check here for if the targeting script is locked or needs to unlock (if you leave the range)
+            // if (!locked)
+            {
+                // Don't change the target if we're already locked on
+                currentTarget = visibleTargets [0];
+            }
 
+            if (currentTarget == null)
+            {
+                Debug.Log ("null target", this);
+            }
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
             //Debug.Log ("Updating position");
 
             // Only show targeting cursor if there is an available target and it is targeted
-            if (targetChanged)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
+            if (targetChanged && currentTarget != null)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
             {
-                animator.SetTriggerSafe (appearTrigger, appearAnimation, 0);
+                animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
+                //forceUnlock = false;
                 //Debug.Log ("Appear trigger");
             }
         } 
         else // if (currentTarget != null)
-        {
-            
-            //Unlock ();
-
-            animator.SetTriggerSafe(disappearAnimation, disappearForcedTrigger, 0);
+        {            
+            if (locked)
+            {
+                // If we're locked, unlock when we don't have a target in range, etc. any longer
+                Unlock ();
+            } 
+            else if (currentTarget == null)
+            {
+                // If there's no possible targets and we aren't locked, we should still hide the arrow
+                animator.SetTriggerSafe (disappearAnimation, disappearForcedTrigger, 0);
+            }
 
             // If no target is visible, we should reset the targeting   
             currentTarget = null;

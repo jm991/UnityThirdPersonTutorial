@@ -489,7 +489,7 @@ public class ThirdPersonCamera : MonoBehaviour
                     // The camera only rotates around the character if they are not moving when targeting
                     if (Mathf.Abs(leftX) <= rightStickThreshold && Mathf.Abs(leftY) <= rightStickThreshold)
                     {
-                        Debug.Log ("rotating, leftX: " + leftX + " leftY: " + leftY, this);
+                        // Debug.Log ("rotating, leftX: " + leftX + " leftY: " + leftY, this);
                         cameraXform.RotateAround (targetingSystem.CurrentTarget.transform.position, targetingSystem.CurrentTarget.transform.up, targetingRotationDegreePerSecond * Time.deltaTime * angleRootToMove);
                     }
                     //Debug.Log ("angle to move remaining: " + angleRootToMove, this);
