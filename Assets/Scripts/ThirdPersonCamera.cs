@@ -121,7 +121,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 lookDir;
 	private Vector3 curLookDir;
 	private BarsEffect barEffect;
-	private CamStates camState = CamStates.Behind;	
+    private CamStates camState = CamStates.Behind;	
 	private float xAxisRot = 0.0f;
 	private CameraPosition firstPersonCamPos;			
 	private float lookWeight;
@@ -137,6 +137,10 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 characterOffset;
 	private Vector3 targetPosition;	
     private Vector3 lookAt;
+
+    // Variables for explicitly setting camera modes
+    private CamStates forcedCamState = CamStates.Behind;  
+    private bool forceCamState = false;
 	
 	#endregion
 	
@@ -331,7 +335,12 @@ public class ThirdPersonCamera : MonoBehaviour
 		if (lShiftKeyDown)
 		{
 			leftTrigger = 1;
-		}
+        }
+        if (leftTrigger <= TARGETING_THRESHOLD)
+        {
+            // Once trigger is let up again, we can reset this variable
+            targetingSystem.ForceUnlock = false;
+        }
 		
 		characterOffset = followXform.position + (distanceUp * followXform.up);
 		
@@ -340,50 +349,59 @@ public class ThirdPersonCamera : MonoBehaviour
 
 		// Determine camera state
 		// * Targeting *
-		if (leftTrigger > TARGETING_THRESHOLD)
-		{			
-			if (camState != CamStates.Target) 
-			{
-                savedRigToGoal = Vector3.zero;
+        /*if (forceCamState)
+        {
+            camState = forcedCamState;
+            forceCamState = false;
+        } 
+        else*/
+        {
+            if (leftTrigger > TARGETING_THRESHOLD && !targetingSystem.ForceUnlock)
+            {			
+                if (camState != CamStates.Target)
+                {
+                    savedRigToGoal = Vector3.zero;
 
-                // If there is a target displayed on screen when entering this mode, we need to lock on it
-                //targetingSystem.Lock();
-			}
-			camState = CamStates.Target;
+                    // If there is a target displayed on screen when entering this mode, we need to lock on it
+                    //targetingSystem.Lock();
+                }
+                camState = CamStates.Target;
 
-			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, widescreen, targetingTime);
-			follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 1.0f);
-		}
-		else
-		{	
-			barEffect.coverage = Mathf.SmoothStep(barEffect.coverage, 0f, targetingTime);
-            follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
-            lookAt = characterOffset;
+                barEffect.coverage = Mathf.SmoothStep (barEffect.coverage, widescreen, targetingTime);
+                follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 1.0f);
+            } 
+            else
+            {	
+                barEffect.coverage = Mathf.SmoothStep (barEffect.coverage, 0f, targetingTime);
+                follow.Animator.SetLayerWeight ((int)AnimatorLayers.Targeting, 0.0f);
+                lookAt = characterOffset;
 			
-			// * First Person *
-			if (rightY > firstPersonThreshold && camState != CamStates.Free && !follow.IsInLocomotion())
-			{
-				// Reset look before entering the first person mode
-				xAxisRot = 0;
-				lookWeight = 0f;
-				camState = CamStates.FirstPerson;
-			}
+                // * First Person *
+                if (rightY > firstPersonThreshold && camState != CamStates.Free && !follow.IsInLocomotion ())
+                {
+                    // Reset look before entering the first person mode
+                    xAxisRot = 0;
+                    lookWeight = 0f;
+                    camState = CamStates.FirstPerson;
+                }
 
-			// * Free *
-			if ((rightY < freeThreshold || mouseWheel < 0f) && System.Math.Round(follow.Speed, 2) == 0)
-			{
-				camState = CamStates.Free;
-				savedRigToGoal = Vector3.zero;
-                savedRigToGoalDirection = RigToGoalDirection;
-			}
+                // * Free *
+                if ((rightY < freeThreshold || mouseWheel < 0f) && System.Math.Round (follow.Speed, 2) == 0)
+                {
+                    camState = CamStates.Free;
+                    savedRigToGoal = Vector3.zero;
+                    savedRigToGoalDirection = RigToGoalDirection;
+                }
 
-			// * Behind the back *
-			if ((camState == CamStates.FirstPerson && bButtonPressed) || 
-				(camState == CamStates.Target && leftTrigger <= TARGETING_THRESHOLD))
-			{
-				camState = CamStates.Behind;
-			}
-		}
+                // * Behind the back *
+                if ((camState == CamStates.FirstPerson && bButtonPressed) ||
+                    (camState == CamStates.Target && leftTrigger <= TARGETING_THRESHOLD) ||
+                    targetingSystem.ForceUnlock)
+                {
+                    camState = CamStates.Behind;
+                }
+            }
+        }
 		
 		// Execute camera state
 		switch (camState)
@@ -621,8 +639,19 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	#endregion
 	
+
+    #region Methods (public)
+
+    public void ForceCameraState(CamStates forcedCamState)
+    {
+        this.forcedCamState = forcedCamState;
+        forceCamState = true;
+    }
+
+    #endregion
 	
-	#region Methods
+
+    #region Methods (private)
 	
 	private void SmoothPosition(Vector3 fromPos, Vector3 toPos)
 	{		
