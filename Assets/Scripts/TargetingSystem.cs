@@ -49,7 +49,8 @@ public class TargetingSystem : MonoBehaviour
     private Animator animator;
     [SerializeField]
     private bool locked = false;
-    private bool forceUnlock = false;
+    private bool lastFrameLocked = false;
+    private bool forceTargetChange = false;
 
     // Animator values
     [SerializeField]
@@ -88,6 +89,8 @@ public class TargetingSystem : MonoBehaviour
 
     #region Properties (public)
 
+    public bool ForceUnlock { get; set; }
+
     public float TargetingCamAngle { get { return targetingCamAngle; } }
 
     public bool HasTarget { get { return currentTarget != null; } } 
@@ -106,6 +109,7 @@ public class TargetingSystem : MonoBehaviour
 	{
         animator = GetComponent<Animator>();
         visibleTargets = new List<Targetable>();
+        ForceUnlock = false;
 
         if (gamecam == null)
         {
@@ -139,7 +143,7 @@ public class TargetingSystem : MonoBehaviour
             }
 		}
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
@@ -168,10 +172,16 @@ public class TargetingSystem : MonoBehaviour
 
             // Check and see if the target changed so we know whether to play the appearing animation
             bool targetChanged = false;
+            if (forceTargetChange)
+            {
+                targetChanged = true;
+                forceTargetChange = false;
+            }
+
             if (visibleTargets [0] != currentTarget)
             {
                 targetChanged = true;
-                Debug.Log ("Target changed!", this);
+                //Debug.Log ("Target changed!", this);
                 //animator.ResetTrigger (appearTrigger);
                 //animator.Play (appearAnimation);
                 //animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
@@ -193,19 +203,49 @@ public class TargetingSystem : MonoBehaviour
             //Debug.Log ("Updating position");
 
             // Only show targeting cursor if there is an available target and it is targeted
+
             if (targetChanged && currentTarget != null)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
             {
-                animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
+                //if (playerSight.TargetsInRange.Count == 0)
+                {
+                    animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
+                    Debug.Log ("current tar 1: " + currentTarget, this);
+                } 
+                /*else
+                {
+                    animator.SetTriggerSafe (appearAnimation, appearTrigger, 0);
+                    Debug.Log ("current tar 2: " + currentTarget, this);
+                }*/
+
                 //forceUnlock = false;
                 //Debug.Log ("Appear trigger");
-            }
+            } 
+
+            if (!locked && lastFrameLocked)
+            {
+                Debug.Log ("current tar 2: " + currentTarget, this);
+                //animator.SetTriggerSafe (appearAnimation, appearTrigger, 0);
+
+                animator.SetTriggerSafe (disappearAnimation, disappearTrigger, 0);
+                //animator.SetTrigger (appearTrigger);
+
+                forceTargetChange = true;
+            } 
+
+            // if (targetChanged)
+            // {
+            //    animator.SetTriggerSafe (appearAnimation, appearTrigger, 0);
+            //    Debug.Log ("current tar 2: " + currentTarget, this);
+            //}
         } 
         else // if (currentTarget != null)
         {            
             if (locked)
             {
-                // If we're locked, unlock when we don't have a target in range, etc. any longer
+                // If we're locked, unlock and switch back to Behind CamState when we don't have a target in range any longer
                 Unlock ();
+                Debug.Log ("Unlocked auto from locked state - behind cam", this);
+                gamecam.ForceCameraState (ThirdPersonCamera.CamStates.Behind);
             } 
             else if (currentTarget == null)
             {
@@ -219,9 +259,12 @@ public class TargetingSystem : MonoBehaviour
 
         if (gamecam.CamState == ThirdPersonCamera.CamStates.Target && currentTarget != null)
         {
+            Debug.Log ("Locking", this);
             animator.SetTriggerSafe (lockingAnimation, lockedTrigger, 0);
             locked = true;
         }
+
+        lastFrameLocked = locked;
 	}
 
     void LateUpdate()
@@ -229,7 +272,7 @@ public class TargetingSystem : MonoBehaviour
         if (gamecam.CamState != ThirdPersonCamera.CamStates.Target && locked)
         {
             // Release any targets
-            Unlock ();
+            Unlock (); 
         }
     }
 
@@ -245,7 +288,7 @@ public class TargetingSystem : MonoBehaviour
             // If we don't have a target anymore, we should unlock
             locked = false;
             //currentTarget = null;
-            forceUnlock = true;
+            ForceUnlock = true;
 
             //animator.ResetTrigger (lockedTrigger);
             animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);
