@@ -106,8 +106,9 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	// Smoothing and damping
     private Vector3 velocityCamSmooth = Vector3.zero;	
+    private Vector3 lookCamSmooth = Vector3.zero;   
 	[SerializeField]
-    private float camSmoothDampTime = 0.1f;
+    private float camSmoothDampTime = 0.1f; 
     [SerializeField]
     private float targetSmoothDampTime = 1.0f;
     private Vector3 velocityLookDir = Vector3.zero;
@@ -118,7 +119,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	
 	
 	// Private global only
-	private Vector3 lookDir;
+    private Vector3 lookDir;
 	private Vector3 curLookDir;
 	private BarsEffect barEffect;
     private CamStates camState = CamStates.Behind;	
@@ -137,6 +138,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 characterOffset;
 	private Vector3 targetPosition;	
     private Vector3 lookAt;
+    private Vector3 lastLookAt;
 
     // Variables for explicitly setting camera modes
     private CamStates forcedCamState = CamStates.Behind;  
@@ -427,8 +429,7 @@ public class ThirdPersonCamera : MonoBehaviour
                     Debug.DrawRay (followXform.position, lookDir, Color.blue);
 				}				
 				
-				targetPosition = characterOffset + followXform.up * distanceUp - Vector3.Normalize(curLookDir) * distanceAway;
-				Debug.DrawLine(followXform.position, targetPosition, Color.magenta);
+                targetPosition = characterOffset + followXform.up * distanceUp - Vector3.Normalize(curLookDir) * distanceAway;
 				
 				break;
             case CamStates.Target:
@@ -491,6 +492,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
                     // Set curLookDir so that there is no jerkiness when returning to Behind CamState
                     curLookDir = savedRigToGoal;
+                    curLookDir.y = 0f;
 
                     //savedRigToGoal = -1f * left;
 
@@ -517,6 +519,7 @@ public class ThirdPersonCamera : MonoBehaviour
                     targetPosition = characterOffset + followXform.up - RigToGoalDirection * distanceAway;
                     // targetPosition = halfwayPoint + RigToGoalDirection * distanceAway;
 
+                    //targetLookAt = targetingSystem.CurrentTarget.transform.position;
                     lookAt = targetingSystem.CurrentTarget.transform.position;
                     lookAt.y += distanceUp;
                     //lookAt = right;
@@ -626,12 +629,18 @@ public class ThirdPersonCamera : MonoBehaviour
 				}
 
 				break;
-		}
+        }
+
+        //Debug.DrawRay(followXform.position, targetPosition, Color.magenta);
+        Debug.DrawRay(followXform.position, curLookDir, Color.green);
 		
 
 		CompensateForWalls(characterOffset, ref targetPosition);		
 		SmoothPosition(cameraXform.position, targetPosition);	
-		transform.LookAt(lookAt);	
+        lastLookAt = Vector3.SmoothDamp(lastLookAt, lookAt, ref lookCamSmooth, camSmoothDampTime); 
+        // TODO: can make the smoothDampTime dependent on whether the difference between lastLookAt and lookAt is large or not
+        Debug.Log ("last look at: " + lastLookAt + " look at: " + lookAt);
+        transform.LookAt(lastLookAt);   
 
 		// Make sure to cache the unscaled mouse wheel value if using mouse/keyboard instead of controller
 		rightStickPrevFrame = new Vector2(rightX, rightY);//mouseWheel != 0 ? mouseWheelScaled : rightY);
