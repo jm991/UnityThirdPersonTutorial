@@ -26,6 +26,7 @@ using System.Collections;
 /// <summary>
 /// #DESCRIPTION OF CLASS#
 /// </summary>
+[RequireComponent(typeof(Animator))] 
 public class CharacterControllerLogic : MonoBehaviour 
 {
 	#region Variables (private)
@@ -321,7 +322,14 @@ public class CharacterControllerLogic : MonoBehaviour
 	void OnDrawGizmos()
 	{	
 	
-	}
+    }
+
+    void OnAnimatorIK()
+    {
+        // Set the Look At Weight - amount to use look at IK vs using the head's animation
+        animator.SetLookAtWeight(gamecam.lookWeight);
+        animator.SetLookAtPosition(gamecam.firstPersonCamPos.XForm.position + gamecam.firstPersonCamPos.XForm.forward);
+    }
 	
 	#endregion
 	

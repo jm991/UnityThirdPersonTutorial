@@ -45,8 +45,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -5}
+  m_LocalRotation: {x: 0, y: 0.6404675, z: 0, w: 0.76798534}
+  m_LocalPosition: {x: 27.7, y: 5.5, z: 168.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -73,14 +73,14 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 1
     height: 1
-  near clip plane: .300000012
+  near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -92,10 +92,12 @@ Camera:
   m_RenderingPath: 2
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
+  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
-  m_StereoSeparation: .0219999999
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!81 &8100000
 AudioListener:
   m_ObjectHideFlags: 1
@@ -116,18 +118,18 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0923359e9e352a4b9b11c7b7161ad67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Radius: .400000006
+  m_Radius: 0.4
   m_SampleCount: 1
   m_OcclusionIntensity: 1.5
   m_Blur: 2
   m_Downsampling: 2
   m_OcclusionAttenuation: 1
-  m_MinZ: .00999999978
+  m_MinZ: 0.01
   m_SSAOShader: {fileID: 4800000, guid: 43ca18288c424f645aaa1e9e07f04c50, type: 3}
   m_RandomTexture: {fileID: 2800000, guid: a181ca8e3c62f3e4b8f183f6c586b032, type: 3}
 --- !u!114 &11400002
@@ -136,7 +138,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a773099f140e846f7835d27351846623, type: 3}
   m_Name: 
@@ -146,8 +148,8 @@ MonoBehaviour:
   hdr: 0
   sepBlurSpread: 2.5
   quality: 1
-  bloomIntensity: .5
-  bloomThreshhold: .5
+  bloomIntensity: 0.25
+  bloomThreshhold: 0.5
   bloomThreshholdColor: {r: 1, g: 1, b: 1, a: 1}
   bloomBlurIterations: 2
   hollywoodFlareBlurIterations: 2
@@ -155,12 +157,12 @@ MonoBehaviour:
   lensflareMode: 1
   hollyStretchWidth: 2.5
   lensflareIntensity: 0
-  lensflareThreshhold: .300000012
-  lensFlareSaturation: .75
-  flareColorA: {r: .400000006, g: .400000006, b: .800000012, a: .75}
-  flareColorB: {r: .400000006, g: .800000012, b: .800000012, a: .75}
-  flareColorC: {r: .800000012, g: .400000006, b: .800000012, a: .75}
-  flareColorD: {r: .800000012, g: .400000006, b: 0, a: .75}
+  lensflareThreshhold: 0.3
+  lensFlareSaturation: 0.75
+  flareColorA: {r: 0.4, g: 0.4, b: 0.8, a: 0.75}
+  flareColorB: {r: 0.4, g: 0.8, b: 0.8, a: 0.75}
+  flareColorC: {r: 0.8, g: 0.4, b: 0.8, a: 0.75}
+  flareColorD: {r: 0.8, g: 0.4, b: 0, a: 0.75}
   blurWidth: 1
   lensFlareVignetteMask: {fileID: 2800000, guid: 95ef4804fe0be4c999ddaa383536cde8,
     type: 3}
@@ -175,7 +177,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8891d133b6d44045a6e76cf5894e931, type: 3}
   m_Name: 
@@ -194,25 +196,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b59969cb0b132da4683696fcedac6864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentRig: {fileID: 0}
-  distanceAway: 3.5
+  cameraXform: {fileID: 0}
+  distanceAway: 5
   distanceAwayMultipler: 3
-  distanceUp: 1.14999998
+  distanceUp: 1.5
   distanceUpMultiplier: 4
   follow: {fileID: 0}
   followXform: {fileID: 0}
-  widescreen: .200000003
-  targetingTime: .5
+  widescreen: 0.2
+  targetingTime: 0.5
   firstPersonLookSpeed: 3
-  firstPersonXAxisClamp: {x: -70, y: 60}
+  firstPersonXAxisClamp: {x: -70, y: 90}
   fPSRotationDegreePerSecond: 120
-  firstPersonThreshold: .5
-  freeThreshold: -.100000001
-  camMinDistFromChar: {x: 1, y: -.5}
-  rightStickThreshold: .300000012
+  firstPersonThreshold: 0.5
+  freeThreshold: -0.1
+  camMinDistFromChar: {x: 1, y: -0.5}
+  rightStickThreshold: 0.1
+  targetingRotationDegreePerSecond: 0.01
   mouseWheelSensitivity: 3
-  camSmoothDampTime: .100000001
-  lookDirDampTime: .100000001
+  compensationOffset: 0.2
+  startingState: 0
+  targetingSystem: {fileID: 0}
+  camSmoothDampTime: 0.1
+  lookAtSmoothDampTime: 0.25
+  targetSmoothDampTime: 1
+  lookDirDampTime: 0.1
+  wallhitMask:
+    serializedVersion: 2
+    m_Bits: 0
+  lookWeight: 0
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -226,10 +238,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 1
   showGeneratedNormals: 0
-  offsetScale: .200000003
+  offsetScale: 0.2
   blurRadius: 18
-  edgeThresholdMin: .0500000007
-  edgeThreshold: .200000003
+  edgeThresholdMin: 0.05
+  edgeThreshold: 0.2
   edgeSharpness: 4
   dlaaSharp: 0
   ssaaShader: {fileID: 4800000, guid: b3728d1488b02490cbd196c7941bf1f8, type: 3}
@@ -257,4 +269,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

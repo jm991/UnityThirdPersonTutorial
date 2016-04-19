@@ -27,7 +27,7 @@ using UnityEditor;
 /// <summary>
 /// Struct to hold data for aligning camera
 /// </summary>
-struct CameraPosition 
+public struct CameraPosition 
 {
 	// Position to align camera to, probably somewhere behind the character
 	// or position to point camera at, probably somewhere along character's axis
@@ -61,13 +61,13 @@ public class ThirdPersonCamera : MonoBehaviour
 	[SerializeField]
 	private Transform cameraXform;
 	[SerializeField]
-	private float distanceAway;
+	private float distanceAway = 5.0f;
 	[SerializeField]
-	private float distanceAwayMultipler = 1.5f;
+	private float distanceAwayMultipler = 3f;
 	[SerializeField]
-	private float distanceUp;
+	private float distanceUp = 1.5f;
 	[SerializeField]
-	private float distanceUpMultiplier = 5f;
+	private float distanceUpMultiplier = 4f;
 	[SerializeField]
 	private CharacterControllerLogic follow;
 	[SerializeField]
@@ -108,7 +108,9 @@ public class ThirdPersonCamera : MonoBehaviour
     private Vector3 velocityCamSmooth = Vector3.zero;	
     private Vector3 lookCamSmooth = Vector3.zero;   
 	[SerializeField]
-    private float camSmoothDampTime = 0.1f; 
+    private float camSmoothDampTime = 0.1f;  
+    [SerializeField]
+    private float lookAtSmoothDampTime = 0.25f; 
     [SerializeField]
     private float targetSmoothDampTime = 1.0f;
     private Vector3 velocityLookDir = Vector3.zero;
@@ -124,8 +126,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	private BarsEffect barEffect;
     private CamStates camState = CamStates.Behind;	
 	private float xAxisRot = 0.0f;
-	private CameraPosition firstPersonCamPos;			
-	private float lookWeight;
+	public CameraPosition firstPersonCamPos;			
+	public float lookWeight;
 	private const float TARGETING_THRESHOLD = 0.01f;
 	private Vector3 savedRigToGoal;
     private Vector3 savedRigToGoalDirection;
@@ -139,6 +141,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	private Vector3 targetPosition;	
     private Vector3 lookAt;
     private Vector3 lastLookAt;
+    private float lookAtDampingThreshold = 0.3f;
 
     // Variables for explicitly setting camera modes
     private CamStates forcedCamState = CamStates.Behind;  
@@ -298,10 +301,11 @@ public class ThirdPersonCamera : MonoBehaviour
 		}
 	}
 
-	void OnAnimatorIK()
+    void OnAnimatorIK()
 	{
 		// Set the Look At Weight - amount to use look at IK vs using the head's animation
-		follow.Animator.SetLookAtWeight(lookWeight);
+        follow.Animator.SetLookAtWeight(lookWeight);
+        follow.Animator.SetLookAtPosition(firstPersonCamPos.XForm.position + firstPersonCamPos.XForm.forward);
 	}
 	
 	void LateUpdate()
@@ -553,7 +557,6 @@ public class ThirdPersonCamera : MonoBehaviour
 				this.transform.rotation = rotationShift * this.transform.rotation;		
 				
 				// Move character model's head
-		        follow.Animator.SetLookAtPosition(firstPersonCamPos.XForm.position + firstPersonCamPos.XForm.forward);
 				lookWeight = Mathf.Lerp(lookWeight, 1.0f, Time.deltaTime * firstPersonLookSpeed);
 				
 				
@@ -568,9 +571,9 @@ public class ThirdPersonCamera : MonoBehaviour
 			
 				// Smoothly transition look direction towards firstPersonCamPos when entering first person mode
 				lookAt = Vector3.Lerp(targetPosition + followXform.forward, this.transform.position + this.transform.forward, camSmoothDampTime * Time.deltaTime);
-				Debug.DrawRay(Vector3.zero, lookAt, Color.black);
-				Debug.DrawRay(Vector3.zero, targetPosition + followXform.forward, Color.white);	
-				Debug.DrawRay(Vector3.zero, firstPersonCamPos.XForm.position + firstPersonCamPos.XForm.forward, Color.cyan);
+                Debug.DrawRay(this.transform.position, lookAt, Color.black);
+                Debug.DrawRay(this.transform.position, targetPosition + followXform.forward, Color.white);	
+                Debug.DrawRay(this.transform.position, firstPersonCamPos.XForm.position + firstPersonCamPos.XForm.forward, Color.cyan);
 			
 				// Choose lookAt target based on distance
 				lookAt = (Vector3.Lerp(this.transform.position + this.transform.forward, lookAt, Vector3.Distance(this.transform.position, firstPersonCamPos.XForm.position)));
@@ -637,9 +640,10 @@ public class ThirdPersonCamera : MonoBehaviour
 
 		CompensateForWalls(characterOffset, ref targetPosition);		
 		SmoothPosition(cameraXform.position, targetPosition);	
-        lastLookAt = Vector3.SmoothDamp(lastLookAt, lookAt, ref lookCamSmooth, camSmoothDampTime); 
-        // TODO: can make the smoothDampTime dependent on whether the difference between lastLookAt and lookAt is large or not
-        Debug.Log ("last look at: " + lastLookAt + " look at: " + lookAt);
+        // The smoothDampTime is dependent on whether the difference between lastLookAt and lookAt is large or not
+        float lookAtDiff = (lookAt - lastLookAt).sqrMagnitude;
+        lastLookAt = Vector3.SmoothDamp(lastLookAt, lookAt, ref lookCamSmooth, lookAtDiff > lookAtDampingThreshold ? lookAtSmoothDampTime : lookAtDiff * lookAtSmoothDampTime); 
+        Debug.Log ("last look at: " + lastLookAt + " look at: " + lookAt + " difference: " + lookAtDiff);
         transform.LookAt(lastLookAt);   
 
 		// Make sure to cache the unscaled mouse wheel value if using mouse/keyboard instead of controller
