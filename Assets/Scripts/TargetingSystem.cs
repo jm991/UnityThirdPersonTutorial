@@ -142,8 +142,9 @@ public class TargetingSystem : MonoBehaviour
 
 
 		// Find all targetable objects in the scene
-		if (targets == null) 
-		{
+		// if (targets == null) 
+		// {
+            targets.Clear();
 			GameObject[] targetObjects = GameObject.FindGameObjectsWithTag(targetTag);
 
             foreach (GameObject target in targetObjects)
@@ -153,7 +154,7 @@ public class TargetingSystem : MonoBehaviour
                     targets.Add (target.GetComponent<Targetable>());
                 }
             }
-		}
+		// }
 
         // Hash all animation names for performance
         m_DisappearId = Animator.StringToHash("Targeting.Disappear");
