@@ -328,7 +328,10 @@ public class CharacterControllerLogic : MonoBehaviour
     {
         // Set the Look At Weight - amount to use look at IK vs using the head's animation
         animator.SetLookAtWeight(gamecam.lookWeight);
-        animator.SetLookAtPosition(gamecam.firstPersonCamPos.XForm.position + gamecam.firstPersonCamPos.XForm.forward);
+        if (gamecam.firstPersonCamPos.XForm != null)
+        {
+            animator.SetLookAtPosition (gamecam.firstPersonCamPos.XForm.position + gamecam.firstPersonCamPos.XForm.forward);
+        }
     }
 	
 	#endregion

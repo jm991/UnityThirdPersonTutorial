@@ -1,27 +1,31 @@
-﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SceneFadeInOut.cs">
+﻿<Properties StartupItem="Assembly-CSharp.csproj" RefactoringSettings.EnableRefactorings="True">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TargetingSystem.cs">
     <Files>
+      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="106" Column="5" />
       <File FileName="Assets\Scripts\SceneFadeInOut.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\ThirdPersonCamera.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TargetingSystem.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CharacterControllerLogic.cs" Line="334" Column="10" />
+      <File FileName="Assets\Scripts\TargetingSystem.cs" Line="183" Column="25" />
       <File FileName="Assets\Scripts\AnimatorHelper.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Targetable.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Targetable.cs" Line="7" Column="34" />
       <File FileName="Assets\Scripts\Sight.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Tags.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\LastPlayerSighting.cs" Line="6" Column="73" />
+      <File FileName="Assets\Scripts\LastPlayerSighting.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint enabled="false" file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="85" column="45" />
       <Breakpoint enabled="false" file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="149" column="1" />
-      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="184" column="1" />
-      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="221" column="1" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="327" column="1" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="317" column="1" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="211" column="82" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="177" column="37" />
+      <Breakpoint file="C:\Users\john\Documents\GitHub\UnityThirdPersonTutorial\Assets\Scripts\TargetingSystem.cs" line="183" column="37" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets\Scripts\TargetingSystem.cs" line="96" offsetX="263" offsetY="1520" expression="targets" liveUpdate="False" />
+    <Watch file="Assets\Scripts\TargetingSystem.cs" line="320" offsetX="662" offsetY="5104" expression="firstUntargeted" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

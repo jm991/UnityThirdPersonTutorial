@@ -10,7 +10,7 @@ public class ThirdPersonCameraEditor : Editor
 		DrawDefaultInspector();
 		EditorGUILayout.Space();
 		ThirdPersonCamera camera = (ThirdPersonCamera) target;
-		ReadOnlyField(camera.CamState.GetType().ToString(), camera.CamState);
+        ReadOnlyField(camera.CamState.GetType().ToString(), camera.CamState);
 	}
 	
 	private void ReadOnlyField(string title, object content)

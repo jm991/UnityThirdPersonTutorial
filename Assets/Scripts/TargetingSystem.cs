@@ -84,6 +84,18 @@ public class TargetingSystem : MonoBehaviour
         "AppearForced",
     };
 
+    // Hashes
+    private int m_DisappearId = 0;
+    private int m_LockedId = 0;
+    private int m_LockingId = 0;
+    private int m_DisappearTransId = 0;
+    private int m_LockedTransId = 0;
+    private int m_LockingTransId = 0;
+
+    // Private global only
+    private AnimatorStateInfo stateInfo;
+    private AnimatorTransitionInfo transInfo;
+
 	#endregion
 
 
@@ -142,11 +154,25 @@ public class TargetingSystem : MonoBehaviour
                 }
             }
 		}
-	}
+
+        // Hash all animation names for performance
+        m_DisappearId = Animator.StringToHash("Targeting.Disappear");
+        m_LockedId = Animator.StringToHash ("Targeting.Locked");
+        m_LockingId = Animator.StringToHash ("Targeting.Locking");
+        m_DisappearTransId = Animator.StringToHash("Targeting.Disappear -> Targeting.Yellow");
+        m_LockedTransId = Animator.StringToHash("Targeting.Locked -> Targeting.Disappear");
+        m_LockingTransId = Animator.StringToHash("Targeting.Locking -> Targeting.Locked");
+    }
 
 	// Update is called once per frame
 	void Update ()
 	{
+        if (animator)
+        {
+            stateInfo = animator.GetCurrentAnimatorStateInfo (0);
+            transInfo = animator.GetAnimatorTransitionInfo (0);
+        }
+
 		// TODO: could optimize targets by adding a sphere collider to all objects and first checking if they collide and only considering that subset
 
         visibleTargets.Clear();
@@ -172,11 +198,6 @@ public class TargetingSystem : MonoBehaviour
 
             // Check and see if the target changed so we know whether to play the appearing animation
             bool targetChanged = false;
-            if (forceTargetChange)
-            {
-                targetChanged = true;
-                forceTargetChange = false;
-            }
 
             if (visibleTargets [0] != currentTarget)
             {
@@ -188,10 +209,19 @@ public class TargetingSystem : MonoBehaviour
             }
 
             // TODO: place check here for if the targeting script is locked or needs to unlock (if you leave the range)
-            if (!locked)
+            if (!locked && !forceTargetChange && !IsInDisappearAnimation())
             {
                 // Don't change the target if we're already locked on
                 currentTarget = visibleTargets [0];
+
+                // TODO: (target switch feature) fix a bug here when cycling target to further away target and releasing
+                // Debug.Log ("Target change forced");
+            }
+
+            if (forceTargetChange)
+            {
+                targetChanged = true;
+                forceTargetChange = false;
             }
 
             if (currentTarget == null)
@@ -206,10 +236,16 @@ public class TargetingSystem : MonoBehaviour
 
             if (targetChanged && currentTarget != null)// && gamecam.CamState == ThirdPersonCamera.CamStates.Target)
             {
+                // Make sure to move the arrow to the original target before making it reappear
+                if (transInfo.fullPathHash == m_DisappearTransId)
+                {
+                    currentTarget = visibleTargets [0];
+                }
+
                 //if (playerSight.TargetsInRange.Count == 0)
                 {
                     animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
-                    Debug.Log ("current tar 1: " + currentTarget, this);
+                    // Debug.Log ("current tar 1: " + currentTarget, this);
                 } 
                 /*else
                 {
@@ -223,7 +259,7 @@ public class TargetingSystem : MonoBehaviour
 
             if (!locked && lastFrameLocked)
             {
-                Debug.Log ("current tar 2: " + currentTarget, this);
+                // Debug.Log ("current tar 2: " + currentTarget, this);
                 //animator.SetTriggerSafe (appearAnimation, appearTrigger, 0);
 
                 animator.SetTriggerSafe (disappearAnimation, disappearTrigger, 0);
@@ -259,9 +295,10 @@ public class TargetingSystem : MonoBehaviour
 
         if (gamecam.CamState == ThirdPersonCamera.CamStates.Target && currentTarget != null)
         {
-            Debug.Log ("Locking", this);
+            // Debug.Log ("Locking", this);
             animator.SetTriggerSafe (lockingAnimation, lockedTrigger, 0);
             locked = true;
+            currentTarget.HasBeenLockedOnto = true;
         }
 
         lastFrameLocked = locked;
@@ -303,6 +340,53 @@ public class TargetingSystem : MonoBehaviour
 
     #region Methods (public)
 
+    public void ClearLockedFlags()
+    {
+        foreach (Targetable target in visibleTargets)
+        {
+            target.HasBeenLockedOnto = false;
+        }
+    }
+
+    public bool IsInDisappearAnimation()
+    {
+        return stateInfo.fullPathHash == m_DisappearId ||
+            stateInfo.fullPathHash == m_LockedId ||
+            stateInfo.fullPathHash == m_LockingId ||
+            transInfo.fullPathHash == m_DisappearTransId ||
+            transInfo.fullPathHash == m_LockedTransId ||
+            transInfo.fullPathHash == m_LockingTransId;
+    }
+
+    public void NextTarget()
+    {
+        // Using FirstOrDefault vs. First since we need to get a null value if nothing is targeted (FirstOrDefault), rather than an Exception (First)
+        Targetable firstUntargeted = visibleTargets.FirstOrDefault (x => !x.HasBeenLockedOnto);
+
+        if (firstUntargeted == null)
+        {
+            Debug.Log ("Cleared 1");
+            ClearLockedFlags ();
+
+            if (visibleTargets.Count > 0)
+            {
+                currentTarget = visibleTargets [0];
+            }
+        }
+        else
+        {
+            // This all works because visibleTargets is sorted every Update by distance from player
+            int index = visibleTargets.IndexOf (currentTarget);
+
+            // Iterate to next target with wraparound logic back to the first target
+            currentTarget = visibleTargets[(index + 1) % visibleTargets.Count];
+            currentTarget.HasBeenLockedOnto = true;
+        }
+
+        forceTargetChange = true;
+
+        Debug.Log ("Target change complete?");
+    }
 
     #endregion
 }
