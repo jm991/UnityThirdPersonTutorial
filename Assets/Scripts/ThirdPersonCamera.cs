@@ -390,7 +390,7 @@ public class ThirdPersonCamera : MonoBehaviour
             // Reset timer/keep it at max value if we are in a state where the trigger is fully pressed
             targetingTimer = targetingTime;
             //midSwitch = false;
-            Debug.Log ("Reset cycle here?");
+            // Debug.Log ("Reset cycle here?");
         } 
         else
         {	

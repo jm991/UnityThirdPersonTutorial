@@ -89,9 +89,12 @@ public class TargetingSystem : MonoBehaviour
     private int m_DisappearId = 0;
     private int m_LockedId = 0;
     private int m_LockingId = 0;
+    private int m_RedId = 0;
     private int m_DisappearTransId = 0;
+    private int m_DisappearRedTransId = 0;
     private int m_LockedTransId = 0;
     private int m_LockingTransId = 0;
+    private int m_RedTransId = 0;
 
     // Private global only
     private AnimatorStateInfo stateInfo;
@@ -161,9 +164,12 @@ public class TargetingSystem : MonoBehaviour
         m_DisappearId = Animator.StringToHash("Targeting.Disappear");
         m_LockedId = Animator.StringToHash ("Targeting.Locked");
         m_LockingId = Animator.StringToHash ("Targeting.Locking");
+        m_RedId = Animator.StringToHash ("Targeting.Red");
         m_DisappearTransId = Animator.StringToHash("Targeting.Disappear -> Targeting.Yellow");
+        m_DisappearRedTransId = Animator.StringToHash("Targeting.Disappear -> Targeting.Red");
         m_LockedTransId = Animator.StringToHash("Targeting.Locked -> Targeting.Disappear");
         m_LockingTransId = Animator.StringToHash("Targeting.Locking -> Targeting.Locked");
+        m_RedTransId = Animator.StringToHash("Targeting.Red -> Targeting.Locking");
     }
 
 	// Update is called once per frame
@@ -368,9 +374,12 @@ public class TargetingSystem : MonoBehaviour
         return stateInfo.fullPathHash == m_DisappearId ||
             stateInfo.fullPathHash == m_LockedId ||
             stateInfo.fullPathHash == m_LockingId ||
+            stateInfo.fullPathHash == m_RedId ||
             transInfo.fullPathHash == m_DisappearTransId ||
+            transInfo.fullPathHash == m_DisappearRedTransId ||
             transInfo.fullPathHash == m_LockedTransId ||
-            transInfo.fullPathHash == m_LockingTransId;
+            transInfo.fullPathHash == m_LockingTransId ||
+            transInfo.fullPathHash == m_RedTransId;
     }
 
     public void NextTarget()
