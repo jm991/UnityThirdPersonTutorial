@@ -196,7 +196,7 @@ public class TargetingSystem : MonoBehaviour
         if (visibleTargets.Count > 0)
         {
             // Sort by distance to player
-            visibleTargets = visibleTargets.OrderBy (x => Vector3.Distance(player.transform.position - x.transform.position)).ToList ();
+            visibleTargets = visibleTargets.OrderBy (x => Vector3.Distance(player.transform.position, x.transform.position)).ToList ();
 
             // Check and see if the target changed so we know whether to play the appearing animation
             bool targetChanged = false;
