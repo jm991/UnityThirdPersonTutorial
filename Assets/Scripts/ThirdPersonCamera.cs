@@ -152,6 +152,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     [SerializeField]
     private bool midSwitch = false;
+    private int cycleCount = 0;
 	
 	#endregion
 	
@@ -242,6 +243,8 @@ public class ThirdPersonCamera : MonoBehaviour
 	/// </summary>
 	void Start ()
 	{
+        cycleCount = 0;
+
 		cameraXform = this.transform;//.parent;
 		if (cameraXform == null)
 		{
@@ -372,8 +375,9 @@ public class ThirdPersonCamera : MonoBehaviour
             // If the trigger value increases during this period, send this state to TargetingSystem to cycle through the targets based on proximity
             if (leftTrigger > lastLeftTrigger && !midSwitch)
             {
-                Debug.Log ("Cycle targets!");
+                Debug.Log ("Cycle targets! " + cycleCount);
                 targetingSystem.NextTarget ();
+                cycleCount++;
 
                 midSwitch = true;
             }
@@ -386,7 +390,7 @@ public class ThirdPersonCamera : MonoBehaviour
             // Reset timer/keep it at max value if we are in a state where the trigger is fully pressed
             targetingTimer = targetingTime;
             //midSwitch = false;
-            // Debug.Log ("Reset cycle here?");
+            Debug.Log ("Reset cycle here?");
         } 
         else
         {	
@@ -456,7 +460,10 @@ public class ThirdPersonCamera : MonoBehaviour
 				break;
             case CamStates.Target:
                 ResetCamera ();
-                midSwitch = false;
+                if (targetingTimer == targetingTime)
+                {
+                    midSwitch = false;
+                }
 
                 if (savedRigToGoal == Vector3.zero)
                 {
