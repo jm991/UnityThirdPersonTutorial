@@ -23,6 +23,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 
 public class TargetingSystem : MonoBehaviour 
 {
@@ -195,7 +196,7 @@ public class TargetingSystem : MonoBehaviour
         if (visibleTargets.Count > 0)
         {
             // Sort by distance to player
-            visibleTargets = visibleTargets.OrderBy (x => Vector2.Distance (player.transform.position, x.transform.position)).ToList ();
+            visibleTargets = visibleTargets.OrderBy (x => Vector3.Distance(player.transform.position - x.transform.position)).ToList ();
 
             // Check and see if the target changed so we know whether to play the appearing animation
             bool targetChanged = false;
@@ -311,6 +312,19 @@ public class TargetingSystem : MonoBehaviour
         {
             // Release any targets
             Unlock (); 
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        foreach (Targetable target in visibleTargets)
+        {
+            GUIStyle textStyle = new GUIStyle ();
+            textStyle.normal.textColor = Color.green;
+
+            float distance = Vector3.Distance (player.transform.position, target.transform.position);
+            float magnitude = (player.transform.position - target.transform.position).magnitude;
+            Handles.Label (target.transform.position, "dist.: " + distance + " mag.: " + magnitude, textStyle);
         }
     }
 
