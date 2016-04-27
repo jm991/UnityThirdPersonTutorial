@@ -416,7 +416,7 @@ public class ThirdPersonCamera : MonoBehaviour
             }
 
             // * Free *
-            if (rightY < freeThreshold || Mathf.Abs(rightX) > freeThreshold || mouseWheel < 0f)// && System.Math.Round (follow.Speed, 2) == 0)
+            if (rightY < freeThreshold || Mathf.Abs(rightX) > Mathf.Abs(freeThreshold) || mouseWheel < 0f)// && System.Math.Round (follow.Speed, 2) == 0)
             {
                 camState = CamStates.Free;
                 savedRigToGoal = Vector3.zero;
@@ -542,12 +542,14 @@ public class ThirdPersonCamera : MonoBehaviour
                     {
                         // Debug.Log ("rotating, leftX: " + leftX + " leftY: " + leftY, this);
                         cameraXform.RotateAround (targetingSystem.CurrentTarget.transform.position, targetingSystem.CurrentTarget.transform.up, targetingRotationDegreePerSecond * Time.deltaTime * angleRootToMove);
+                        //cameraXform.RotateAround (halfwayPoint, halfwayPoint + Vector3.up, targetingRotationDegreePerSecond * Time.deltaTime * angleRootToMove);
                     }
                     //Debug.Log ("angle to move remaining: " + angleRootToMove, this);
                     Debug.DrawRay (this.transform.position, forwardTest, Color.blue);
                     Debug.DrawRay (this.transform.position, smallerAngle, Color.red);
 
                     targetPosition = characterOffset + followXform.up - RigToGoalDirection * distanceAway;
+                    // targetPosition = halfwayPoint + followXform.up - RigToGoalDirection * distanceAway;
                     // targetPosition = halfwayPoint + RigToGoalDirection * distanceAway;
 
                     //targetLookAt = targetingSystem.CurrentTarget.transform.position;
