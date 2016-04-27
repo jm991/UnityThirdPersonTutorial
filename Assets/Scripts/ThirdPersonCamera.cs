@@ -146,8 +146,8 @@ public class ThirdPersonCamera : MonoBehaviour
     private float lookAtDampingThreshold = 0.3f;
 
     // Variables for explicitly setting camera modes
-    private CamStates forcedCamState = CamStates.Behind;  
-    private bool forceCamState = false;
+    // private CamStates forcedCamState = CamStates.Behind;  
+    // private bool forceCamState = false;
     private float lastLeftTrigger = 0.0f;
 
     [SerializeField]
@@ -384,7 +384,12 @@ public class ThirdPersonCamera : MonoBehaviour
             }
         }
 
-        if (leftTrigger > (1.0f - TARGETING_THRESHOLD) && !targetingSystem.ForceUnlock)
+        /*if (forceCamState)
+        {
+            camState = forcedCamState;
+            forceCamState = false;
+        } */
+        if (leftTrigger > (1.0f - TARGETING_THRESHOLD) && !targetingSystem.ForceUnlock && !targetingSystem.ForceUnlock)
         {			
             TargetingSetup();
 
@@ -553,8 +558,9 @@ public class ThirdPersonCamera : MonoBehaviour
                     // targetPosition = halfwayPoint + RigToGoalDirection * distanceAway;
 
                     //targetLookAt = targetingSystem.CurrentTarget.transform.position;
-                    lookAt = targetingSystem.CurrentTarget.transform.position;
-                    lookAt.y += distanceUp;
+                    //lookAt = targetingSystem.CurrentTarget.transform.position;
+                    lookAt = halfwayPoint;
+                    //lookAt.y += distanceUp;
                     //lookAt = right;
 
                     //targetPosition = characterOffset + followXform.up - (targetingSystem.CurrentTarget.transform.position - followXform.position) * distanceAway;
@@ -688,11 +694,11 @@ public class ThirdPersonCamera : MonoBehaviour
 
     #region Methods (public)
 
-    public void ForceCameraState(CamStates forcedCamState)
+    /*public void ForceCameraState(CamStates forcedCamState)
     {
         this.forcedCamState = forcedCamState;
         forceCamState = true;
-    }
+    }*/
 
     #endregion
 	

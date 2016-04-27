@@ -235,6 +235,7 @@ public class TargetingSystem : MonoBehaviour
             if (currentTarget == null)
             {
                 Debug.Log ("null target", this);
+                //currentTarget = visibleTargets [0];
             }
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
@@ -289,7 +290,7 @@ public class TargetingSystem : MonoBehaviour
                 // If we're locked, unlock and switch back to Behind CamState when we don't have a target in range any longer
                 Unlock ();
                 Debug.Log ("Unlocked auto from locked state - behind cam", this);
-                gamecam.ForceCameraState (ThirdPersonCamera.CamStates.Behind);
+                // gamecam.ForceCameraState (ThirdPersonCamera.CamStates.Behind);
             } 
             else if (currentTarget == null)
             {
