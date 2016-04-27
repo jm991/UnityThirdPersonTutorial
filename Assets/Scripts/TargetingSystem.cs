@@ -235,7 +235,7 @@ public class TargetingSystem : MonoBehaviour
             if (currentTarget == null)
             {
                 Debug.Log ("null target", this);
-                //currentTarget = visibleTargets [0];
+                currentTarget = visibleTargets [0];
             }
             // Position the cursor above the closest target
             this.transform.position = currentTarget.transform.position + new Vector3 (0, currentTarget.GetComponent<Collider> ().bounds.size.y);
@@ -253,6 +253,8 @@ public class TargetingSystem : MonoBehaviour
 
                 //if (playerSight.TargetsInRange.Count == 0)
                 {
+                    // TODO: this is the bug where sometimes the lock is released while quickly retargeting
+                    Debug.Log ("APPEAR FORCED", this);
                     animator.SetTriggerSafe (appearAnimation, appearForcedTrigger, 0);
                     // Debug.Log ("current tar 1: " + currentTarget, this);
                 } 
@@ -272,6 +274,7 @@ public class TargetingSystem : MonoBehaviour
                 //animator.SetTriggerSafe (appearAnimation, appearTrigger, 0);
 
                 animator.SetTriggerSafe (disappearAnimation, disappearTrigger, 0);
+                Debug.Log ("Released lock 2", this);
                 //animator.SetTrigger (appearTrigger);
 
                 forceTargetChange = true;
@@ -347,12 +350,12 @@ public class TargetingSystem : MonoBehaviour
         {
             // If we don't have a target anymore, we should unlock
             locked = false;
-            // Debug.Log ("released lock", this);
             //currentTarget = null;
             ForceUnlock = true;
 
             //animator.ResetTrigger (lockedTrigger);
             animator.SetTriggerSafe(disappearAnimation, disappearTrigger, 0);
+            Debug.Log ("released lock", this);
             //animator.ResetTrigger (disappearTrigger);
             //Debug.Log ("Disappear trigger");
         }
