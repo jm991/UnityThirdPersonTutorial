@@ -188,7 +188,8 @@ public class ThirdPersonCamera : MonoBehaviour
 		Behind,			// Single analog stick, Japanese-style; character orbits around camera; default for games like Mario64 and 3D Zelda series
 		FirstPerson,	// Traditional 1st person look around
 		Target,			// L-targeting variation on "Behind" mode
-		Free			// High angle; character moves relative to camera facing direction
+		Free,			// High angle; character moves relative to camera facing direction
+        TargetingFree   // Most complex camera state; you can lock on using the L-targeting feature, and then move the right stick left, right, or down to have the camera in Free mode at the same time
 	}
 
 	public enum AnimatorLayers
@@ -415,7 +416,7 @@ public class ThirdPersonCamera : MonoBehaviour
             }
 
             // * Free *
-            if ((rightY < freeThreshold || mouseWheel < 0f) && System.Math.Round (follow.Speed, 2) == 0)
+            if (rightY < freeThreshold || Mathf.Abs(rightX) > freeThreshold || mouseWheel < 0f)// && System.Math.Round (follow.Speed, 2) == 0)
             {
                 camState = CamStates.Free;
                 savedRigToGoal = Vector3.zero;

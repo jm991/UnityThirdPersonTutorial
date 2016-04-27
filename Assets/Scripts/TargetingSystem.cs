@@ -306,7 +306,7 @@ public class TargetingSystem : MonoBehaviour
             // Debug.Log ("Locking", this);
             animator.SetTriggerSafe (lockingAnimation, lockedTrigger, 0);
             locked = true;
-            Debug.Log ("set lock", this);
+            // Debug.Log ("set lock", this);
             currentTarget.HasBeenLockedOnto = true;
         }
 
@@ -346,7 +346,7 @@ public class TargetingSystem : MonoBehaviour
         {
             // If we don't have a target anymore, we should unlock
             locked = false;
-            Debug.Log ("released lock", this);
+            // Debug.Log ("released lock", this);
             //currentTarget = null;
             ForceUnlock = true;
 
