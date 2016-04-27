@@ -485,6 +485,13 @@ public class ThirdPersonCamera : MonoBehaviour
                     Vector3 targetToPlayer = (targetingSystem.CurrentTarget.transform.position - followXform.position);
                     targetToPlayer.y += distanceUp;
                     Vector3 halfwayPoint = characterOffset + (targetToPlayer * 0.5f);
+
+                    // To account for targets above character's head
+                    if (halfwayPoint.y > characterOffset.y)
+                    {
+                        halfwayPoint.y -= distanceUp;
+                    }
+
                     Vector3 targetToRig = (targetingSystem.CurrentTarget.transform.position - this.transform.position).normalized;
                     Debug.DrawRay (halfwayPoint, Vector3.up, Color.yellow);
 
