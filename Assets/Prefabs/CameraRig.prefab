@@ -45,8 +45,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0.6404675, z: 0, w: 0.76798534}
-  m_LocalPosition: {x: 27.7, y: 5.5, z: 168.5}
+  m_LocalRotation: {x: 0, y: -0.18440376, z: 0, w: 0.9828506}
+  m_LocalPosition: {x: 39.73, y: 7.35, z: 154.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -205,6 +205,7 @@ MonoBehaviour:
   followXform: {fileID: 0}
   widescreen: 0.2
   targetingTime: 0.5
+  targetingTimer: 0
   firstPersonLookSpeed: 3
   firstPersonXAxisClamp: {x: -70, y: 90}
   fPSRotationDegreePerSecond: 120
@@ -212,7 +213,7 @@ MonoBehaviour:
   freeThreshold: -0.1
   camMinDistFromChar: {x: 1, y: -0.5}
   rightStickThreshold: 0.1
-  targetingRotationDegreePerSecond: 0.01
+  targetingRotationDegreePerSecond: 0.5
   mouseWheelSensitivity: 3
   compensationOffset: 0.2
   startingState: 0
@@ -225,6 +226,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   lookWeight: 0
+  midSwitch: 0
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -95,7 +95,7 @@ public class ThirdPersonCamera : MonoBehaviour
 	[SerializeField]
 	private const float freeRotationDegreePerSecond = -5f;
     [SerializeField]
-    private float targetingRotationDegreePerSecond = 0.01f;
+    private float targetingRotationDegreePerSecond = 0.5f;
 	[SerializeField]
 	private float mouseWheelSensitivity = 3.0f;
 	[SerializeField]
